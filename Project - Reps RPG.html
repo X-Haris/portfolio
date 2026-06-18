@@ -988,7 +988,7 @@
   @media (max-width: 768px)  { body > .plain-card { width: calc(100% - 28px); } }
 </style>
 </head>
-<body>
+<body data-theme="dark">
 
 <div class="bg"></div>
 
@@ -1377,7 +1377,7 @@
   // Theme toggle — mirrors Portfolio.html behavior
   (function() {
     var saved = localStorage.getItem('theme');
-    if (saved === 'dark') document.body.setAttribute('data-theme', 'dark');
+    if (saved === 'light') document.body.removeAttribute('data-theme');
     var btn = document.getElementById('themeToggle');
     if (btn) btn.addEventListener('click', function() {
       var isDark = document.body.getAttribute('data-theme') === 'dark';
