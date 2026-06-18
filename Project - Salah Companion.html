@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Salah Companion — Case study · Abduloski.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ========== TOKENS ========== */
+  :root {
+    --ink-0: #f5f7fb;
+    --ink-1: #d6dbe6;
+    --ink-2: #8a93a6;
+    --ink-3: #5a6377;
+
+    --neon-cyan:  #4ad9ff;
+    --neon-blue:  #5a8cff;
+    --neon-violet:#9b7bff;
+    --neon-pink:  #ff5fb3;
+    --neon-amber: #ffa14a;
+    --neon-green: #4ee19a;
+
+    --r-pill: 999px;
+    --r-card: 32px;
+    --r-card-sm: 26px;
+
+    --font-sans: 'Inter Tight', system-ui, sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    color: #1a1d28;
+    background: #e6e7ea;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background 400ms ease, color 300ms ease;
+  }
+
+  /* ========== BACKDROP ========== */
+  .bg {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(28% 22% at 18% 28%, rgba(74,217,255,0.55), transparent 65%),
+      radial-gradient(26% 22% at 82% 22%, rgba(255,95,179,0.45), transparent 65%),
+      radial-gradient(30% 24% at 70% 75%, rgba(155,123,255,0.50), transparent 65%),
+      radial-gradient(26% 22% at 12% 78%, rgba(255,161,74,0.40), transparent 65%),
+      radial-gradient(24% 20% at 50% 50%, rgba(78,225,154,0.30), transparent 65%),
+      linear-gradient(180deg, #f3f4f7 0%, #dadce1 60%, #c8cad0 100%);
+    z-index: -2;
+  }
+
+  /* ========== PANEL CARDS (frosted white) ========== */
+  .plain-card, .hero-card, .nav-bar {
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: var(--r-card);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.9) inset,
+      0 12px 28px -10px rgba(40,50,80,0.18),
+      0 24px 48px -16px rgba(40,50,80,0.12);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: background 400ms ease, border-color 400ms ease, box-shadow 400ms ease;
+  }
+  .nav-bar { border-radius: var(--r-pill); }
+  .plain-inner { padding: 36px 40px; }
+
+  /* ========== DARK MODE ========== */
+  body[data-theme="dark"] {
+    color: #e8ecf3;
+    background: #07080d;
+  }
+  body[data-theme="dark"] .bg {
+    background:
+      radial-gradient(28% 22% at 18% 28%, rgba(74,217,255,0.22), transparent 65%),
+      radial-gradient(26% 22% at 82% 22%, rgba(255,95,179,0.18), transparent 65%),
+      radial-gradient(30% 24% at 70% 75%, rgba(155,123,255,0.22), transparent 65%),
+      radial-gradient(26% 22% at 12% 78%, rgba(255,161,74,0.16), transparent 65%),
+      radial-gradient(24% 20% at 50% 50%, rgba(78,225,154,0.14), transparent 65%),
+      linear-gradient(180deg, #0a0c14 0%, #06080e 60%, #03040a 100%);
+  }
+  body[data-theme="dark"] .plain-card,
+  body[data-theme="dark"] .hero-card,
+  body[data-theme="dark"] .nav-bar {
+    background: rgba(18,22,32,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 12px 28px -10px rgba(0,0,0,0.6),
+      0 24px 48px -16px rgba(0,0,0,0.5);
+  }
+
+  /* Light/dark color helpers for text inside frosted panels */
+  .h-light { color: #0a0c14; }
+  .p-light { color: #4a5060; }
+  .muted-light { color: #6a7180; }
+  body[data-theme="dark"] .h-light { color: #f5f7fb; }
+  body[data-theme="dark"] .p-light { color: #a8b0c0; }
+  body[data-theme="dark"] .muted-light { color: #6a7180; }
+
+  /* ========== LAYOUT ========== */
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 32px 100px;
+    position: relative;
+  }
+
+  /* ========== LIQUID GLASS (.lg) — same as Portfolio ========== */
+  .lg {
+    position: relative;
+    isolation: isolate;
+    transition: transform 500ms cubic-bezier(.2,.9,.2,1.2), filter 400ms ease;
+  }
+  a.lg:hover, button.lg:hover, .lg.is-interactive:hover { filter: brightness(1.08); }
+  a.lg:active, button.lg:active, .lg.is-interactive:active {
+    transform: translateY(1px);
+    transition-duration: 120ms;
+  }
+  .lg-glow {
+    position: absolute;
+    left: 4%; right: 4%; top: 60%; bottom: -40%;
+    border-radius: 999px;
+    background: var(--lg-glow, radial-gradient(50% 60% at 50% 30%, rgba(74,217,255,1), rgba(74,217,255,0.5) 50%, transparent 80%));
+    filter: blur(18px);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .lg-body {
+    position: relative;
+    border-radius: inherit;
+    background:
+      radial-gradient(120% 70% at 50% -30%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 18%, rgba(255,255,255,0) 45%),
+      radial-gradient(95% 55% at 50% 115%, var(--lg-core, #4ad9ff) 0%, var(--lg-core, #4ad9ff) 12%, transparent 55%),
+      radial-gradient(90% 60% at 50% 50%, var(--lg-deep, rgba(8,16,28,0.45)) 0%, var(--lg-edge, rgba(4,6,12,0.55)) 80%);
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.85) inset,
+      0 2px 0 rgba(255,255,255,0.30) inset,
+      0 8px 18px -4px rgba(0,0,0,0.55) inset,
+      0 -3px 0 var(--lg-core, #4ad9ff) inset,
+      0 -10px 22px -4px var(--lg-core, #4ad9ff) inset,
+      0 14px 24px -8px rgba(20,30,50,0.45),
+      0 26px 38px -14px rgba(20,30,50,0.32),
+      0 3px 6px -1px rgba(20,30,50,0.22);
+    overflow: hidden;
+    color: #fff;
+  }
+  .lg-body::before {
+    content: '';
+    position: absolute;
+    left: 4%; right: 4%; top: 1px; height: 36%;
+    border-radius: 999px / 100%;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 35%, rgba(255,255,255,0) 70%);
+    filter: blur(0.5px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .lg-body::after {
+    content: '';
+    position: absolute;
+    left: 60%; top: 8%;
+    width: 18%; height: 14%;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,0.95), rgba(255,255,255,0) 70%);
+    filter: blur(1.5px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .lg-body > * { position: relative; z-index: 2; }
+
+  /* Tints */
+  .t-cyan   { --lg-core: #4ad9ff; --lg-deep: rgba(6,24,36,0.42); --lg-edge: rgba(2,10,20,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #4ad9ff, rgba(74,217,255,0.4) 60%, transparent 90%); }
+  .t-violet { --lg-core: #9b7bff; --lg-deep: rgba(12,10,28,0.42); --lg-edge: rgba(5,4,20,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #9b7bff, rgba(155,123,255,0.4) 60%, transparent 90%); }
+  .t-pink   { --lg-core: #ff5fb3; --lg-deep: rgba(28,8,32,0.42); --lg-edge: rgba(20,4,12,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #ff5fb3, rgba(255,95,179,0.4) 60%, transparent 90%); }
+  .t-aqua   { --lg-core: #4ee19a; --lg-deep: rgba(6,22,14,0.42); --lg-edge: rgba(2,10,6,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #4ee19a, rgba(78,225,154,0.4) 60%, transparent 90%); }
+  .t-amber  { --lg-core: #ffa14a; --lg-deep: rgba(28,14,4,0.42); --lg-edge: rgba(20,8,10,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #ffa14a, rgba(255,161,74,0.4) 60%, transparent 90%); }
+  .t-mono   { --lg-core: #b8c3d6; --lg-deep: rgba(10,13,24,0.30); --lg-edge: rgba(4,6,12,0.45);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, rgba(184,195,214,0.6), transparent 90%); }
+
+  /* ========== NAV ========== */
+  .nav-inner { padding: 10px 14px 10px 22px; display: flex; align-items: center; gap: 6px; }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 600; color: #0a0c14; font-size: 15px;
+    margin-right: auto;
+    text-decoration: none;
+  }
+  body[data-theme="dark"] .brand { color: #f5f7fb; }
+  .brand-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #fff 0%, rgba(255,255,255,0) 50%),
+      conic-gradient(from 0deg, #4ad9ff, #9b7bff, #ff5fb3, #4ad9ff);
+    box-shadow: 0 0 14px rgba(155,123,255,0.7), 0 0 24px rgba(74,217,255,0.5);
+  }
+  .nav-links { display: flex; gap: 2px; }
+
+  /* Mobile hamburger — hidden on desktop, shown ≤640px */
+  .nav-toggle {
+    display: none;
+    width: 38px; height: 38px;
+    flex: 0 0 auto;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(20,30,50,0.14);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    cursor: pointer; padding: 0;
+    transition: background 200ms, border-color 200ms;
+  }
+  .nav-toggle:hover { background: rgba(255,255,255,0.85); }
+  .nav-toggle-bars { display: flex; flex-direction: column; gap: 4px; width: 16px; }
+  .nav-toggle-bars span {
+    display: block; height: 2px; width: 100%;
+    background: #1a1d28; border-radius: 2px;
+    transition: transform 240ms ease, opacity 200ms ease;
+  }
+  body[data-theme="dark"] .nav-toggle { background: rgba(20,24,34,0.7); border: 1px solid rgba(255,255,255,0.12); }
+  body[data-theme="dark"] .nav-toggle:hover { background: rgba(30,36,50,0.9); }
+  body[data-theme="dark"] .nav-toggle-bars span { background: #f5f7fb; }
+  .nav-bar.nav-open .nav-toggle-bars span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-bar.nav-open .nav-toggle-bars span:nth-child(2) { opacity: 0; }
+  .nav-bar.nav-open .nav-toggle-bars span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .nav-pill {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px;
+    border-radius: var(--r-pill);
+    color: #4a5060;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .nav-pill:hover { color: #1a1d28; }
+  .nav-pill.active { color: #fff; }
+  body[data-theme="dark"] .nav-pill { color: #a8b0c0; }
+  body[data-theme="dark"] .nav-pill:hover { color: #f5f7fb; }
+  .nav-pill.active::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(120% 80% at 50% -30%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 30%, transparent 50%),
+      radial-gradient(80% 90% at 50% 130%, rgba(74,217,255,0.95) 0%, rgba(74,217,255,0.5) 35%, transparent 60%),
+      linear-gradient(180deg, #0d0e16 0%, #050609 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.45) inset,
+      0 6px 14px -4px rgba(0,0,0,0.7) inset,
+      0 8px 20px -6px rgba(0,0,0,0.7);
+    z-index: -1;
+  }
+  .nav-pill.active::after {
+    content: '';
+    position: absolute;
+    left: -10%; right: -10%; top: 40%; bottom: -60%;
+    border-radius: inherit;
+    background: radial-gradient(60% 80% at 50% 30%, rgba(74,217,255,1), rgba(74,217,255,0.5) 50%, transparent 80%);
+    filter: blur(14px);
+    z-index: -2;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(20,30,50,0.14);
+    background: rgba(255,255,255,0.6);
+    border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #1a1d28;
+    margin-right: 6px;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.85); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .icon-moon { display: none; }
+  .theme-toggle .icon-sun { display: block; }
+  body[data-theme="dark"] .theme-toggle {
+    background: rgba(20,24,34,0.7);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #f5f7fb;
+  }
+  body[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+  body[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+
+  .talk-btn .lg-body {
+    padding: 11px 20px;
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #fff; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+  }
+  .ic { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ========== BUTTONS ========== */
+  .btn { border-radius: var(--r-pill); }
+  .btn .lg-body {
+    padding: 14px 26px;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 500; color: #fff;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+  }
+  .btn.btn-sm .lg-body { padding: 10px 18px; font-size: 13px; }
+
+  /* ========== PROJECT HERO ========== */
+  .project-hero { padding: 40px 48px 36px; }
+  .back-link {
+    display: flex;
+    width: fit-content;
+    align-items: center; gap: 8px;
+    color: #4a5060; text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    margin-bottom: 22px;
+    transition: color 200ms;
+  }
+  .back-link:hover { color: #0a0c14; }
+  body[data-theme="dark"] .back-link { color: #a8b0c0; }
+  body[data-theme="dark"] .back-link:hover { color: #f5f7fb; }
+
+  .ph-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.9);
+    color: #2a2d3a; font-size: 12px; font-weight: 500;
+    margin-bottom: 22px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 6px 14px -4px rgba(20,30,50,0.12);
+  }
+  body[data-theme="dark"] .ph-tag {
+    background: rgba(20,24,34,0.7);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: #e8ecf3;
+  }
+  .ph-tag .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ad9ff;
+    box-shadow: 0 0 0 3px rgba(74,217,255,0.20), 0 0 10px #4ad9ff;
+  }
+
+  .ph-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 5.4vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 0 0 18px;
+    color: #0a0c14;
+  }
+  body[data-theme="dark"] .ph-title { color: #f5f7fb; }
+  .ph-title .grad {
+    font-style: italic;
+  }
+  .ph-sub {
+    color: #4a5060;
+    font-size: 17px; line-height: 1.6;
+    max-width: 640px;
+    margin: 0 0 28px;
+  }
+  body[data-theme="dark"] .ph-sub { color: #a8b0c0; }
+
+  .ph-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
+
+  /* Meta grid — 4 columns of label/value */
+  .ph-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(20,30,50,0.08);
+    padding-top: 22px;
+  }
+  body[data-theme="dark"] .ph-meta { border-top-color: rgba(255,255,255,0.08); }
+  .ph-meta > div {
+    padding: 0 22px 0 0;
+    border-right: 1px solid rgba(20,30,50,0.08);
+  }
+  body[data-theme="dark"] .ph-meta > div { border-right-color: rgba(255,255,255,0.08); }
+  .ph-meta > div:last-child { border-right: none; padding-right: 0; }
+  .ph-meta > div:not(:first-child) { padding-left: 22px; }
+  .ph-meta .lbl {
+    display: block;
+    color: #6a7180;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .ph-meta .val {
+    color: #0a0c14;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  body[data-theme="dark"] .ph-meta .val { color: #f5f7fb; }
+
+  /* ========== BIG PREVIEW PANEL ========== */
+  .preview {
+    border-radius: var(--r-card);
+    margin-bottom: 24px;
+    padding: 28px;
+    background:
+      radial-gradient(80% 100% at 50% 0%, rgba(74,217,255,0.10), transparent 60%),
+      linear-gradient(180deg, #0d1424 0%, #050810 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 30px 60px -20px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  /* glowing bloom behind preview */
+  .preview::before {
+    content: '';
+    position: absolute;
+    inset: -10% 20%;
+    background: radial-gradient(60% 50% at 50% 0%, rgba(74,217,255,0.30), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .preview-frame {
+    position: relative;
+    border-radius: 18px;
+    background:
+      radial-gradient(80% 100% at 50% 0%, rgba(255,255,255,0.04), transparent 60%),
+      linear-gradient(180deg, #0a0c14 0%, #04050a 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 24px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 24px 48px -16px rgba(0,0,0,0.6) inset;
+    overflow: hidden;
+  }
+  .preview-frame svg {
+    width: 100%; height: auto;
+    display: block;
+  }
+
+  /* ========== SECTION HEADERS ========== */
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #6a7180; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  body[data-theme="dark"] .section-eyebrow { color: #6a7180; }
+  .section-eyebrow::before {
+    content: ''; width: 14px; height: 1px; background: #6a7180;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 42px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #0a0c14;
+    margin: 0 0 16px;
+  }
+  body[data-theme="dark"] .section-title { color: #f5f7fb; }
+  .section-body {
+    color: #4a5060;
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 680px;
+    margin: 0;
+  }
+  body[data-theme="dark"] .section-body { color: #a8b0c0; }
+
+  /* ========== OVERVIEW (challenge/approach/outcome — 3 columns) ========== */
+  .narrative {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .narr-card {
+    padding: 26px 24px 28px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 8px 18px -6px rgba(40,50,80,0.10);
+  }
+  body[data-theme="dark"] .narr-card {
+    background: rgba(20,24,34,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .narr-num {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--num, #4ad9ff);
+    margin-bottom: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .narr-num .glyph {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--num, #4ad9ff);
+    box-shadow: 0 0 12px var(--num, #4ad9ff);
+  }
+  .narr-card h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    color: #0a0c14;
+    margin: 4px 0 10px;
+    letter-spacing: -0.01em;
+  }
+  body[data-theme="dark"] .narr-card h3 { color: #f5f7fb; }
+  .narr-card p {
+    color: #4a5060;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  body[data-theme="dark"] .narr-card p { color: #a8b0c0; }
+
+  /* ========== GALLERY ========== */
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .gal-card {
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(80% 100% at 50% 0%, rgba(255,255,255,0.04), transparent 60%),
+      linear-gradient(180deg, #0a0c14 0%, #04050a 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 14px 28px -10px rgba(0,0,0,0.5);
+  }
+  .gal-card svg {
+    width: 100%; height: auto;
+    display: block;
+  }
+  .gal-cap {
+    position: absolute;
+    left: 16px; bottom: 14px;
+    color: rgba(255,255,255,0.85);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .gal-cap::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--neon-cyan);
+    margin-right: 8px;
+    box-shadow: 0 0 8px var(--neon-cyan);
+    vertical-align: middle;
+  }
+
+  /* ========== RESULTS — big numeric tiles ========== */
+  .results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .result-tile {
+    border-radius: 26px;
+  }
+  .result-tile .lg-body {
+    padding: 22px 24px 22px;
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .result-tile .r-num {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: #fff;
+    font-size: clamp(38px, 3.6vw, 50px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .result-tile .r-num .unit {
+    font-size: 0.5em; opacity: 0.9; margin-left: 4px; vertical-align: top;
+  }
+  .result-tile .r-lbl {
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .result-tile .r-spark { margin-top: 6px; opacity: 0.85; }
+  .result-tile .r-spark svg { width: 100%; height: 32px; display: block; }
+
+  /* ========== TECH STACK chips (reuse skill-chip vocabulary) ========== */
+  .stack-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .chip { border-radius: var(--r-pill); }
+  .chip .lg-body {
+    padding: 9px 16px 9px 10px;
+    display: inline-flex; align-items: center; gap: 10px;
+    color: #fff; font-size: 13px; font-weight: 500;
+  }
+  .chip .ico {
+    width: 22px; height: 22px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 10px;
+    background: var(--ico-bg, #1a1d28);
+    color: var(--ico-fg, #fff);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  /* ========== TWO-COL: copy + sidebar ========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+  .feature-list { margin: 22px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .feature-list li {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+  }
+  body[data-theme="dark"] .feature-list li {
+    background: rgba(20,24,34,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .feature-list .fl-ico {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 10px;
+    background:
+      radial-gradient(120% 80% at 50% -30%, rgba(255,255,255,0.5), transparent 50%),
+      linear-gradient(180deg, #0d0e16, #04050a);
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 4px 10px -2px rgba(0,0,0,0.5) inset;
+  }
+  .feature-list .fl-ico svg { width: 16px; height: 16px; }
+  .feature-list h4 {
+    margin: 0 0 4px;
+    font-size: 14px; font-weight: 600;
+    color: #0a0c14;
+  }
+  body[data-theme="dark"] .feature-list h4 { color: #f5f7fb; }
+  .feature-list p {
+    margin: 0;
+    color: #4a5060;
+    font-size: 13px; line-height: 1.55;
+  }
+  body[data-theme="dark"] .feature-list p { color: #a8b0c0; }
+
+  /* Sidebar — code/terminal mock */
+  .codebox {
+    border-radius: 22px;
+    background:
+      radial-gradient(80% 100% at 50% 0%, rgba(74,217,255,0.04), transparent 60%),
+      linear-gradient(180deg, #0a0c14 0%, #04050a 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    box-shadow: 0 14px 28px -10px rgba(0,0,0,0.5);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .cb-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.75);
+    font-size: 11px;
+  }
+  .cb-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .cb-dot.red { background: #ff5f56; }
+  .cb-dot.yel { background: #ffbd2e; }
+  .cb-dot.grn { background: #27c93f; }
+  .cb-title { margin-left: 6px; color: rgba(255,255,255,0.65); }
+  .cb-body { padding: 16px 18px; color: #c8c8c8; line-height: 1.7; }
+  .cb-body .k { color: #ff5fb3; }
+  .cb-body .s { color: #4ee19a; }
+  .cb-body .n { color: #ffa14a; }
+  .cb-body .c { color: #5a6377; font-style: italic; }
+  .cb-body .v { color: #4ad9ff; }
+  .cb-body .p { color: #9b7bff; }
+
+  /* ========== NEXT / PREV ========== */
+  .nav-next {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .np-card {
+    border-radius: 24px;
+    text-decoration: none;
+    padding: 26px 28px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 8px 18px -6px rgba(40,50,80,0.10);
+    transition: transform 200ms, background 200ms;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+  body[data-theme="dark"] .np-card {
+    background: rgba(20,24,34,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .np-card:hover { transform: translateY(-2px); }
+  .np-eyebrow { color: #6a7180; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .np-title {
+    font-family: var(--font-display);
+    font-weight: 400; font-size: 26px;
+    color: #0a0c14;
+    margin: 10px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  body[data-theme="dark"] .np-title { color: #f5f7fb; }
+  .np-desc { color: #4a5060; font-size: 13px; line-height: 1.5; }
+  body[data-theme="dark"] .np-desc { color: #a8b0c0; }
+  .np-card .arrow {
+    position: absolute;
+    top: 26px; right: 28px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(20,24,34,0.06);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #1a1d28;
+    transition: background 200ms, transform 200ms;
+  }
+  body[data-theme="dark"] .np-card .arrow {
+    background: rgba(255,255,255,0.08); color: #f5f7fb;
+  }
+  .np-card:hover .arrow { transform: translate(2px, -2px); }
+  .np-card.prev .arrow { left: 28px; right: auto; transform: scaleX(-1); }
+  .np-card.prev:hover .arrow { transform: scaleX(-1) translate(2px, -2px); }
+  .np-card.prev { text-align: right; }
+
+  /* ========== CONTACT CTA (same vocabulary as Portfolio) ========== */
+  .contact { margin-top: 24px; }
+  .contact .plain-inner { padding: 50px 56px 46px; text-align: center; }
+  .contact-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.9);
+    color: #2a2d3a; font-size: 13px; font-weight: 500;
+    margin-bottom: 22px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset;
+  }
+  body[data-theme="dark"] .contact-eyebrow {
+    background: rgba(20,24,34,0.7);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: #e8ecf3;
+  }
+  .contact-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #0a0c14;
+    margin: 0 0 14px;
+  }
+  body[data-theme="dark"] .contact-title { color: #f5f7fb; }
+  .contact-title .grad {
+    font-style: italic;
+  }
+  .contact-sub {
+    color: #4a5060;
+    font-size: 16px; line-height: 1.6;
+    max-width: 520px; margin: 0 auto 30px;
+  }
+  body[data-theme="dark"] .contact-sub { color: #a8b0c0; }
+  .contact-actions {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 1100px) {
+    .narrative { grid-template-columns: 1fr 1fr; }
+    .narrative > :nth-child(3) { grid-column: span 2; }
+  }
+  @media (max-width: 1024px) {
+    .page { padding: 20px 20px 72px; }
+    .project-hero { padding: 32px 32px 28px; }
+    .two-col { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .ph-meta { grid-template-columns: 1fr 1fr; row-gap: 18px; }
+    .ph-meta > div { border-right: none; padding-right: 0; }
+    .ph-meta > div:not(:first-child) { padding-left: 0; }
+    .ph-meta > div:nth-child(odd) { border-right: 1px solid rgba(20,30,50,0.08); padding-right: 22px; }
+    body[data-theme="dark"] .ph-meta > div:nth-child(odd) { border-right-color: rgba(255,255,255,0.08); }
+    .ph-meta > div:nth-child(even) { padding-left: 22px; }
+    .results { grid-template-columns: 1fr; }
+    .nav-next { grid-template-columns: 1fr; }
+    .np-card.prev { text-align: left; }
+    .nav-bar { border-radius: 28px; }
+    .nav-inner { padding: 8px 10px 8px 16px; gap: 4px; flex-wrap: wrap; }
+  }
+  @media (max-width: 768px) {
+    .page { padding: 16px 14px 64px; }
+    .project-hero { padding: 24px 22px; }
+    .plain-inner { padding: 26px 24px; }
+    .narrative { grid-template-columns: 1fr; gap: 12px; }
+    .narrative > :nth-child(3) { grid-column: auto; }
+    .narr-card { padding: 22px 20px; }
+    .gallery { grid-template-columns: 1fr; }
+    .preview { padding: 18px; }
+    .preview-frame { padding: 14px; }
+    .contact .plain-inner { padding: 36px 22px 32px; }
+  }
+  @media (max-width: 640px) {
+    html, body { overflow-x: clip; max-width: 100vw; }
+    .page, .nav-bar, .plain-card, .hero-card { max-width: 100%; min-width: 0; }
+    .nav-bar { position: relative; overflow: visible; }
+    .nav-bar.nav-open { z-index: 300; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      flex-direction: column;
+      gap: 4px;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0; right: 0;
+      padding: 8px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.95);
+      -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 0 20px 44px rgba(10,14,30,0.20);
+      z-index: 60;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity 200ms ease, transform 220ms ease, visibility 200ms;
+    }
+    .nav-bar.nav-open .nav-links { opacity: 1; visibility: visible; transform: none; }
+    .nav-links .nav-pill { width: 100%; justify-content: flex-start; padding: 13px 16px; font-size: 15px; border-radius: 14px; }
+    body[data-theme="dark"] .nav-links { background: rgba(20,24,34,0.96); border-color: rgba(255,255,255,0.1); }
+    .nav-inner { padding: 6px 6px 6px 12px; gap: 6px; flex-wrap: nowrap; min-width: 0; }
+    .talk-btn .lg-body { padding: 9px 14px !important; font-size: 13px; gap: 6px; }
+    .brand { font-size: 14px; }
+    .ph-title { font-size: clamp(30px, 9vw, 44px); }
+    .ph-sub { font-size: 15px; }
+    .ph-meta { grid-template-columns: 1fr; row-gap: 16px; padding-top: 18px; }
+    .ph-meta > div { border-right: none !important; padding: 0 !important; }
+    .ph-row .lg.btn { width: 100%; }
+    .ph-row .lg.btn .lg-body { width: 100%; justify-content: center; }
+    .section-title { font-size: 26px; }
+    .contact-title { font-size: clamp(26px, 8vw, 38px); }
+    .plain-card, .hero-card { border-radius: 22px; }
+  }
+  @media (max-width: 420px) {
+    .nav-bar { border-radius: 22px; }
+    .page { padding: 12px 8px 48px; }
+    .brand-dot { display: none; }
+    .brand { gap: 0; }
+    .talk-btn .lg-body { padding: 8px 12px !important; font-size: 12.5px; }
+    .plain-card, .hero-card { border-radius: 18px; }
+    .preview { padding: 12px; }
+    .preview-frame { padding: 10px; }
+  }
+  @media (hover: none) {
+    a.lg:hover .lg-body, button.lg:hover .lg-body { transform: none; }
+  }
+
+  /* Big preview hero — 3 real Play Store screenshots arranged as phones */
+  .preview-frame.sc-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px 24px;
+    min-height: 480px;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-frame.sc-hero .sc-hero-img {
+    width: 30%;
+    max-width: 320px;
+    height: auto;
+    border-radius: 18px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 30px 60px -20px rgba(0,0,0,0.7),
+      0 0 0 1px rgba(255,255,255,0.06);
+    transition: transform 400ms ease;
+  }
+  .preview-frame.sc-hero .sc-hero-img.left  { transform: rotate(-5deg) translateY(20px); }
+  .preview-frame.sc-hero .sc-hero-img.right { transform: rotate(5deg)  translateY(20px); }
+  .preview-frame.sc-hero .sc-hero-img.center {
+    transform: translateY(-8px) scale(1.06);
+    z-index: 2;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.10) inset,
+      0 40px 80px -20px rgba(0,0,0,0.8),
+      0 0 0 1px rgba(255,255,255,0.08);
+  }
+  @media (max-width: 768px) {
+    .preview-frame.sc-hero {
+      gap: 8px;
+      padding: 18px 12px;
+      min-height: 0;
+    }
+    .preview-frame.sc-hero .sc-hero-img {
+      width: 32%;
+      border-radius: 12px;
+    }
+    .preview-frame.sc-hero .sc-hero-img.left  { transform: rotate(-3deg) translateY(8px); }
+    .preview-frame.sc-hero .sc-hero-img.right { transform: rotate(3deg)  translateY(8px); }
+    .preview-frame.sc-hero .sc-hero-img.center { transform: translateY(-4px) scale(1.04); }
+  }
+  @media (max-width: 480px) {
+    .preview-frame.sc-hero { gap: 4px; padding: 14px 8px; }
+    .preview-frame.sc-hero .sc-hero-img { border-radius: 8px; }
+  }
+
+
+  /* ========== SCREENSHOT SLIDER ========== */
+  .shot-slider { position: relative; }
+  .ss-track {
+    display: flex; gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px 2px 8px;
+  }
+  .ss-track::-webkit-scrollbar { display: none; }
+  .ss-slide {
+    flex: 0 0 auto; margin: 0;
+    width: 74%;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: 22px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 24px 50px -18px rgba(0,0,0,0.7);
+  }
+  .ss-slide img { width: 100%; height: auto; display: block; }
+  @media (min-width: 640px)  { .ss-slide { width: 44%; } }
+  @media (min-width: 1000px) { .ss-slide { width: 30%; } }
+  .ss-slide figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 22px 16px 12px;
+    font-family: monospace; font-size: 12px; letter-spacing: 0.4px;
+    color: #fff;
+    background: linear-gradient(0deg, rgba(0,0,0,0.72), transparent);
+  }
+  .ss-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 26px; line-height: 1; cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    z-index: 6; transition: background 160ms;
+  }
+  .ss-arrow:hover { background: rgba(255,255,255,0.26); }
+  .ss-arrow.prev { left: 10px; }
+  .ss-arrow.next { right: 10px; }
+  @media (max-width: 640px) {
+    .ss-arrow { width: 40px; height: 40px; font-size: 22px; }
+  }
+
+  /* Bottom sections render OUTSIDE .page (stray close tag) — constrain them
+     to match the in-page content width so they don't stretch edge-to-edge. */
+  body > .plain-card {
+    max-width: 1056px;
+    width: calc(100% - 64px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (max-width: 1024px) { body > .plain-card { width: calc(100% - 40px); } }
+  @media (max-width: 768px)  { body > .plain-card { width: calc(100% - 28px); } }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="page">
+
+  <!-- ============================================================ NAV -->
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <a href="Portfolio.html" class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">Abduloski.dev</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="Portfolio.html" class="nav-pill">Home</a>
+        <a href="Projects.html" class="nav-pill active">Work</a>
+        <a href="Portfolio.html#about" class="nav-pill">About</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <a href="Portfolio.html#contact" class="lg talk-btn t-cyan" style="border-radius: var(--r-pill);">
+        <span class="lg-glow" aria-hidden="true"></span>
+        <span class="lg-body">
+          Let's talk
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <span class="nav-toggle-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================================ PROJECT HERO -->
+  <section class="plain-card">
+    <div class="project-hero">
+      <a href="Projects.html" class="back-link">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+        Back to all projects
+      </a>
+
+      <span class="ph-tag"><span class="dot"></span>Mobile app · Lifestyle</span>
+
+      <h1 class="ph-title">Salah <span class="grad">Companion</span></h1>
+
+      <p class="ph-sub">A complete Islamic companion for the modern Muslim — Quran reading, prayer times, Qibla, a step-by-step Salah guide, word-by-word memorisation and a Hijri calendar, all in one calm, focused Android app.</p>
+
+      <div class="ph-row">
+        <a href="https://play.google.com/store/apps/details?id=com.haris.salahcompanion" target="_blank" rel="noopener" class="lg btn t-cyan">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <span class="lg-body">
+            Get it on Google Play
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </span>
+        </a>
+        <a href="https://abduloski.dev" target="_blank" rel="noopener" class="lg btn btn-sm t-mono">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <span class="lg-body">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+            Developer site
+          </span>
+        </a>
+      </div>
+
+      <div class="ph-meta">
+        <div>
+          <span class="lbl">Client</span>
+          <span class="val">Personal product</span>
+        </div>
+        <div>
+          <span class="lbl">Role</span>
+          <span class="val">Designer · developer</span>
+        </div>
+        <div>
+          <span class="lbl">Released</span>
+          <span class="val">2025 · still shipping</span>
+        </div>
+        <div>
+          <span class="lbl">Platform</span>
+          <span class="val">Android · Google Play</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ BIG PREVIEW -->
+  <div class="preview">
+    <div class="shot-slider">
+      <button class="ss-arrow prev" aria-label="Previous screenshot">‹</button>
+      <div class="ss-track">
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/gSD0NAtKKeFgRH208ZP-BBZrzi8Zb5yxmkFFYWL9GP7GcxA-EPCtJ-CxsPpn5Gw6wWudkWuTqXFMOeFPg6d6D5Q=w800" alt="01 · Today’s prayers"/><figcaption>01 · Today’s prayers</figcaption></figure>
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/owF_GEWL1JWgNrHTEimv7zg-ijnhkov7ZLr7aD8bmawUxMQCVdhETL5M1pmqvvecvNMK0rtbWwrCCbfXyIQDmg=w800" alt="02 · Quran reader"/><figcaption>02 · Quran reader</figcaption></figure>
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/FKkFArSIBZdY6mhMYwiS1bExtRtLobxVbqxIq2sJdjNYSUf6i3M_bYuidru26FmG1lWjvm5oSPNDfg8ssRzdWg=w800" alt="03 · Qibla compass"/><figcaption>03 · Qibla compass</figcaption></figure>
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/nTA0FiKOruFU-Br5I2fMxhIVtLayQkKgNk7bwDf4SsM3tGYZnb0mqdhP8FydUG7c74xsu9w8J5pjK27Eo7q9GP8=w800" alt="04 · Salah guide"/><figcaption>04 · Salah guide</figcaption></figure>
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/mqGMnvJQW8AP0VGWxxuwSR7lD7RchLZiuLXDpwSNhnirXggtRbQA6xgZoV0npmJHlBwsPRANzKMYNxnKlqnM5g=w800" alt="05 · Word-by-word"/><figcaption>05 · Word-by-word</figcaption></figure>
+        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/ohAu54Tok0zMLJgXDWMO7mmau9MuODPaNky46O59d4UK0DazyGLWHmPoykLyZL94aGIZXyC68WNm5UmB1zc3=w800" alt="06 · Hijri calendar"/><figcaption>06 · Hijri calendar</figcaption></figure>
+      </div>
+      <button class="ss-arrow next" aria-label="Next screenshot">›</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ OVERVIEW NARRATIVE -->
+  <section class="plain-card">
+    <div class="plain-inner">
+      <span class="section-eyebrow">Overview</span>
+      <h2 class="section-title">A complete Islamic toolkit —<br/>quiet enough to use every day.</h2>
+      <p class="section-body">Most Islamic apps either lean on heavy ornament or scatter every feature on the home screen. The brief I set for myself was simpler: design a workspace a tired parent, a new revert, and a lifelong reciter would all open without thinking — calm typography, one clear next action, every utility one tap away.</p>
+
+      <div class="narrative">
+        <div class="narr-card" style="--num:#ff5fb3;">
+          <div class="narr-num"><span class="glyph"></span>01 · The brief</div>
+          <h3>Too many apps. Too much noise.</h3>
+          <p>The category is crowded and visually loud. I wanted one app that covered Quran, prayer, Qibla and learning — without the cluttered home screens, ads-first layouts or pixel-art ornament that define most competitors.</p>
+        </div>
+        <div class="narr-card" style="--num:#4ad9ff;">
+          <div class="narr-num"><span class="glyph"></span>02 · The approach</div>
+          <h3>One next action, every time.</h3>
+          <p>Every screen leads with the next decision the user actually wants — the next prayer, the next verse, the direction of Makkah. Drilldowns slide in instead of navigating away. Tajweed audio is downloaded for offline use.</p>
+        </div>
+        <div class="narr-card" style="--num:#4ee19a;">
+          <div class="narr-num"><span class="glyph"></span>03 · The outcome</div>
+          <h3>A daily-driver app, organically grown.</h3>
+          <p>4.8★ from 38 reviews, 5,000+ downloads on Google Play with no paid marketing. Users describe it as “straightforward,” “clean,” and “the one I kept after deleting the rest.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ FEATURES + CODE -->
+  <section class="plain-card">
+    <div class="plain-inner">
+      <span class="section-eyebrow">What we shipped</span>
+      <div class="two-col">
+        <div>
+          <h2 class="section-title">Six tools in one app,<br/>each earning its slot.</h2>
+          <p class="section-body">Nothing on the home screen exists for decoration. Every feature solves a specific daily task — prayer, recitation, direction, memorisation, calendar, charity — and gets out of the way once the user has what they came for.</p>
+
+          <ul class="feature-list">
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div>
+                <h4>Accurate prayer times</h4>
+                <p>Auto-located salah times with customisable notifications and a countdown to the next prayer.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3l3 6 6 1-4.5 4 1 6L12 17l-5.5 3 1-6L3 10l6-1z"/></svg></span>
+              <div>
+                <h4>Live Qibla compass</h4>
+                <p>Magnetometer-driven direction to Makkah with a Kaaba marker, distance and a calm pulse animation.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h12a4 4 0 010 8H4z"/><path d="M4 5v14h12a4 4 0 004-4"/></svg></span>
+              <div>
+                <h4>Full Quran with word-by-word audio</h4>
+                <p>Tap any word for individual playback. Synchronised highlighting, loop a verse, audio caches offline.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>
+              <div>
+                <h4>Step-by-step Salah guide</h4>
+                <p>Illustrated instructions for Wudu, 2/3/4 rakah prayers, with jumps into the relevant Surah or Dua.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></span>
+              <div>
+                <h4>Hijri calendar &amp; fasting tracker</h4>
+                <p>Reminders for Ramadan, Eid, and significant days; logs voluntary fasts with running statistics.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg></span>
+              <div>
+                <h4>Hasanat counter &amp; Zakat calculator</h4>
+                <p>Estimates reward letters as you read, and a built-in Zakat tool that handles cash, gold, and assets.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="codebox">
+            <div class="cb-head">
+              <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
+              <span class="cb-title">design-tokens.kt</span>
+            </div>
+            <div class="cb-body">
+<span class="c">// Calm-first palette. Green for active state,</span><br/>
+<span class="c">// gold for sacred ornament, dark base for night reads.</span><br/>
+<br/>
+<span class="k">object</span> <span class="v">SalahPalette</span> {<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">surface</span>&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFF0A1F1A</span>)<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">surfaceAlt</span> = <span class="v">Color</span>(<span class="s">0xFF14302A</span>)<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">active</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFF4EE19A</span>) <span class="c">// salah · qibla</span><br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">sacred</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFF5E7B8</span>) <span class="c">// quran · dhikr</span><br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">textHi</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFFFFFFF</span>)<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">textLo</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFA4D5B9</span>)<br/>
+}<br/>
+<br/>
+<span class="k">object</span> <span class="v">SalahType</span> {<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">display</span> = <span class="v">FontFamily</span>(<span class="s">"Fraunces Italic"</span>)<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">arabic</span>&nbsp; = <span class="v">FontFamily</span>(<span class="s">"Amiri"</span>)<br/>
+&nbsp;&nbsp;<span class="k">val</span> <span class="p">ui</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <span class="v">FontFamily</span>(<span class="s">"Inter"</span>)<br/>
+}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- ============================================================ RESULTS -->
+  <section class="plain-card">
+    <div class="plain-inner">
+      <span class="section-eyebrow">Results</span>
+      <h2 class="section-title">Reception so far.</h2>
+      <p class="section-body">All numbers below are from the live Google Play listing. The app launched without a marketing budget; growth is entirely organic word-of-mouth.</p>
+
+      <div class="results">
+        <div class="lg result-tile t-aqua">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <div class="lg-body">
+            <div class="r-num">4.8<span class="unit">★</span></div>
+            <div class="r-lbl">average rating across 38 verified Play Store reviews</div>
+            <div class="r-spark">
+              <svg viewBox="0 0 200 32" preserveAspectRatio="none">
+                <g fill="rgba(255,255,255,0.9)">
+                  <polygon points="10,4 12.5,10.5 19,10.5 13.8,14.5 15.8,21 10,17 4.2,21 6.2,14.5 1,10.5 7.5,10.5"/>
+                  <polygon points="50,4 52.5,10.5 59,10.5 53.8,14.5 55.8,21 50,17 44.2,21 46.2,14.5 41,10.5 47.5,10.5"/>
+                  <polygon points="90,4 92.5,10.5 99,10.5 93.8,14.5 95.8,21 90,17 84.2,21 86.2,14.5 81,10.5 87.5,10.5"/>
+                  <polygon points="130,4 132.5,10.5 139,10.5 133.8,14.5 135.8,21 130,17 124.2,21 126.2,14.5 121,10.5 127.5,10.5"/>
+                  <polygon fill="rgba(255,255,255,0.4)" points="170,4 172.5,10.5 179,10.5 173.8,14.5 175.8,21 170,17 164.2,21 166.2,14.5 161,10.5 167.5,10.5"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="lg result-tile t-cyan">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <div class="lg-body">
+            <div class="r-num">5K<span class="unit">+</span></div>
+            <div class="r-lbl">organic downloads on Google Play · zero paid marketing</div>
+            <div class="r-spark">
+              <svg viewBox="0 0 200 32" preserveAspectRatio="none">
+                <polyline points="0,28 30,26 60,22 90,18 120,14 150,10 180,6 200,4" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="lg result-tile t-violet">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <div class="lg-body">
+            <div class="r-num">3<span class="unit"> langs</span></div>
+            <div class="r-lbl">English, French and Bosnian — day-one localisation for the core audience</div>
+            <div class="r-spark">
+              <svg viewBox="0 0 200 32" preserveAspectRatio="none">
+                <g font-family="Inter Tight, sans-serif" font-size="12" fill="rgba(255,255,255,0.85)" font-weight="600">
+                  <text x="0" y="22">EN</text>
+                  <text x="80" y="22">FR</text>
+                  <text x="160" y="22">BS</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ TECH STACK -->
+  <section class="plain-card">
+    <div class="plain-inner">
+      <span class="section-eyebrow">Stack</span>
+      <h2 class="section-title">Built with.</h2>
+      <div class="stack-grid">
+        <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">A</span>Android</span>
+        </span>
+        <span class="lg is-interactive chip t-violet" style="--ico-bg:#7F52FF;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">K</span>Kotlin</span>
+        </span>
+        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#0d1a2a;--ico-fg:#4ad9ff;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">JC</span>Jetpack Compose</span>
+        </span>
+        <span class="lg is-interactive chip t-amber" style="--ico-bg:#FFA000;--ico-fg:#0a0c14;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">FB</span>Firebase</span>
+        </span>
+        <span class="lg is-interactive chip t-pink" style="--ico-bg:linear-gradient(135deg,#F24E1E,#A259FF);">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">F</span>Figma</span>
+        </span>
+        <span class="lg is-interactive chip t-mono" style="--ico-bg:#1a1d28;--ico-fg:#f5e7b8;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">M3</span>Material 3</span>
+        </span>
+        <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">R</span>Room DB</span>
+        </span>
+        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#1a1d28;--ico-fg:#4ad9ff;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">Co</span>Coroutines</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ PREV / NEXT -->
+  <section class="plain-card">
+    <div class="plain-inner">
+      <span class="section-eyebrow">Keep exploring</span>
+      <h2 class="section-title">Other work.</h2>
+      <div class="nav-next">
+        <a href="Projects.html" class="np-card prev">
+          <div class="arrow">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="np-eyebrow">← All projects</div>
+          <div class="np-title">Browse the index</div>
+          <div class="np-desc">See every case study, side projects and experiments in one grid.</div>
+        </a>
+        <a href="Project - Drone Dash.html" class="np-card">
+          <div class="arrow">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="np-eyebrow">Next project →</div>
+          <div class="np-title">Drone Dash</div>
+          <div class="np-desc">An endless arcade flyer — pilot a drone through birds, jets, storms and orbit. Live on Google Play.</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONTACT CTA -->
+  <section class="plain-card contact">
+    <div class="plain-inner">
+      <span class="contact-eyebrow">
+        <span style="width:7px;height:7px;border-radius:50%;background:#4ee19a;box-shadow:0 0 0 3px rgba(78,225,154,0.25),0 0 10px #4ee19a;"></span>
+        Available for new work
+      </span>
+      <h2 class="contact-title">Have a project<br/><span class="grad">in mind?</span></h2>
+      <p class="contact-sub">I'm currently taking on freelance work and full-time roles. Drop a line — I usually reply within a day.</p>
+      <div class="contact-actions">
+        <a href="Portfolio.html#contact" class="lg btn t-cyan">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <span class="lg-body">
+            Get in touch
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </span>
+        </a>
+        <a href="Portfolio.html" class="lg btn t-mono">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <span class="lg-body">
+            Back to home
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Theme toggle — mirrors Portfolio.html behavior
+  (function() {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark') document.body.setAttribute('data-theme', 'dark');
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function() {
+      var isDark = document.body.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.body.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  })();
+</script>
+
+
+  <script>
+  (function(){
+    document.querySelectorAll('.shot-slider').forEach(function(s){
+      var track = s.querySelector('.ss-track');
+      var prev = s.querySelector('.ss-arrow.prev');
+      var next = s.querySelector('.ss-arrow.next');
+      var anim = null;
+      function step(dir){
+        var slide = track.querySelector('.ss-slide');
+        var w = slide ? slide.getBoundingClientRect().width + 16 : track.clientWidth * 0.8;
+        var max = track.scrollWidth - track.clientWidth;
+        var start = track.scrollLeft;
+        var target = Math.max(0, Math.min(max, start + dir * w));
+        var change = target - start;
+        if (Math.abs(change) < 1) { track.scrollLeft = target; return; }
+        if (anim) clearTimeout(anim);
+        // Snap fights a JS scroll animation — turn it off while animating, restore after.
+        track.style.scrollSnapType = 'none';
+        var dur = 420, t0 = Date.now();
+        (function frame(){
+          var p = Math.min(1, (Date.now() - t0) / dur);
+          var e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2; // easeInOutCubic
+          track.scrollLeft = start + change * e;
+          if (p < 1) { anim = setTimeout(frame, 16); }
+          else { track.scrollLeft = target; track.style.scrollSnapType = ''; anim = null; }
+        })();
+      }
+      if (prev) prev.addEventListener('click', function(){ step(-1); });
+      if (next) next.addEventListener('click', function(){ step(1); });
+    });
+  })();
+  </script>
+<script>
+(function() {
+  var nav = document.querySelector('.nav-bar');
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!nav || !toggle || !links) return;
+  function setOpen(open) {
+    nav.classList.toggle('nav-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  toggle.addEventListener('click', function(e) { e.stopPropagation(); setOpen(!nav.classList.contains('nav-open')); });
+  links.addEventListener('click', function(e) { if (e.target.closest('.nav-pill')) setOpen(false); });
+  document.addEventListener('click', function(e) { if (nav.classList.contains('nav-open') && !nav.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') setOpen(false); });
+})();
+</script>
+</body>
+</html>
