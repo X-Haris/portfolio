@@ -623,7 +623,7 @@
   /* ========== TWO-COL: copy + sidebar ========== */
   .two-col {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1fr;
     gap: 26px;
     align-items: start;
   }
@@ -1191,54 +1191,6 @@
               </div>
             </li>
           </ul>
-        </div>
-
-        <div>
-          <div class="codebox">
-            <div class="cb-head">
-              <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
-              <span class="cb-title">DomainAllocator.kt</span>
-            </div>
-            <div class="cb-body">
-<span class="c">// Assemble a mock exam whose question mix</span><br/>
-<span class="c">// matches the real AWS SAA-C03 weighting.</span><br/>
-<br/>
-<span class="k">fun</span> <span class="v">allocate</span>(<br/>
-&nbsp;&nbsp;chapters: <span class="v">List</span>&lt;<span class="v">ChapterPool</span>&gt;,<br/>
-&nbsp;&nbsp;targetTotal: <span class="v">Int</span><br/>
-): <span class="v">Map</span>&lt;<span class="v">ExamDomain</span>, <span class="v">Int</span>&gt; {<br/>
-<br/>
-&nbsp;&nbsp;<span class="k">val</span> byDomain = chapters<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.filter { it.examDomain != <span class="k">null</span> }<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.groupBy { it.examDomain!! }<br/>
-&nbsp;&nbsp;<span class="k">val</span> totalWeight = byDomain.keys<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.sumOf { <span class="p">EXAM_DOMAIN_WEIGHTS</span>[it] ?: <span class="n">0</span> }<br/>
-<br/>
-&nbsp;&nbsp;<span class="c">// target per domain, by exam weight</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> raw = byDomain.mapValues { (d, _) -><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">val</span> w = <span class="p">EXAM_DOMAIN_WEIGHTS</span>[d] ?: <span class="n">0</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;targetTotal.toDouble() * w / totalWeight<br/>
-&nbsp;&nbsp;}<br/>
-&nbsp;&nbsp;<span class="k">val</span> target = raw<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.mapValues { it.value.toInt() }<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.toMutableMap()<br/>
-<br/>
-&nbsp;&nbsp;<span class="c">// distribute the remainder by</span><br/>
-&nbsp;&nbsp;<span class="c">// largest fraction (Hamilton's method)</span><br/>
-&nbsp;&nbsp;<span class="k">var</span> left = targetTotal - target.values.sum()<br/>
-&nbsp;&nbsp;raw.entries<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.sortedByDescending {<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it.value - it.value.toInt()<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;.forEach { (d, _) -><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">if</span> (left-- &gt; <span class="n">0</span>)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target[d] = target[d]!! + <span class="n">1</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
-&nbsp;&nbsp;<span class="c">// ... split per chapter, capped to capacity</span><br/>
-&nbsp;&nbsp;<span class="k">return</span> target<br/>
-}
-            </div>
-          </div>
         </div>
       </div>
     </div>
