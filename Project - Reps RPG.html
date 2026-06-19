@@ -623,7 +623,7 @@
   /* ========== TWO-COL: copy + sidebar ========== */
   .two-col {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1fr;
     gap: 26px;
     align-items: start;
   }
@@ -1171,35 +1171,6 @@
               </div>
             </li>
           </ul>
-        </div>
-
-        <div>
-          <div class="codebox">
-            <div class="cb-head">
-              <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
-              <span class="cb-title">combat.kt</span>
-            </div>
-            <div class="cb-body">
-<span class="c">// Combat is a function of the user’s body.</span><br/>
-<span class="c">// Rep → damage, weighted by form and combo.</span><br/>
-<br/>
-<span class="k">data class</span> <span class="v">Attack</span>(<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">element</span>: <span class="v">Element</span>,<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">reps</span>: <span class="v">Int</span>,<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">formScore</span>: <span class="v">Float</span>, <span class="c">// 0–1</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">combo</span>: <span class="v">Int</span><br/>
-)<br/>
-<br/>
-<span class="k">fun</span> <span class="v">damage</span>(a: <span class="v">Attack</span>, boss: <span class="v">Boss</span>): <span class="v">Int</span> {<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">base</span>&nbsp; = a.reps * <span class="n">9</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">crit</span>&nbsp; = <span class="k">if</span> (a.element == boss.weakness) <span class="n">2.0f</span> <span class="k">else</span> <span class="n">1.0f</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">comboM</span> = <span class="n">1f</span> + (a.combo - <span class="n">1</span>).coerceAtLeast(<span class="n">0</span>) * <span class="n">0.15f</span><br/>
-&nbsp;&nbsp;<span class="k">return</span> (base * a.formScore * crit * comboM).toInt()<br/>
-}<br/>
-<br/>
-<span class="k">enum class</span> <span class="v">Element</span> { <span class="p">FIRE</span>, <span class="p">AIR</span>, <span class="p">WATER</span> }
-            </div>
-          </div>
         </div>
       </div>
     </div>
