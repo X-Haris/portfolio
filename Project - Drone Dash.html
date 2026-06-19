@@ -623,7 +623,7 @@
   /* ========== TWO-COL: copy + sidebar ========== */
   .two-col {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1fr;
     gap: 26px;
     align-items: start;
   }
@@ -1172,35 +1172,6 @@
             </li>
           </ul>
         </div>
-
-        <div>
-          <div class="codebox">
-            <div class="cb-head">
-              <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
-              <span class="cb-title">spawner.kt</span>
-            </div>
-            <div class="cb-body">
-<span class="c">// The sky is a function of altitude.</span><br/>
-<span class="c">// Each zone reweights what can spawn.</span><br/>
-<br/>
-<span class="k">enum class</span> <span class="v">Zone</span> { <span class="p">RURAL</span>, <span class="p">CITY</span>, <span class="p">STORM</span>, <span class="p">STRATO</span>, <span class="p">ORBIT</span> }<br/>
-<br/>
-<span class="k">fun</span> <span class="v">zoneFor</span>(altitude: <span class="v">Int</span>): <span class="v">Zone</span> = <span class="k">when</span> {<br/>
-&nbsp;&nbsp;altitude &lt; <span class="n">400</span>&nbsp;&nbsp;-&gt; <span class="v">Zone</span>.<span class="p">RURAL</span><br/>
-&nbsp;&nbsp;altitude &lt; <span class="n">1200</span>&nbsp;-&gt; <span class="v">Zone</span>.<span class="p">CITY</span><br/>
-&nbsp;&nbsp;altitude &lt; <span class="n">2400</span>&nbsp;-&gt; <span class="v">Zone</span>.<span class="p">STORM</span><br/>
-&nbsp;&nbsp;altitude &lt; <span class="n">4000</span>&nbsp;-&gt; <span class="v">Zone</span>.<span class="p">STRATO</span><br/>
-&nbsp;&nbsp;<span class="k">else</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; <span class="v">Zone</span>.<span class="p">ORBIT</span><br/>
-}<br/>
-<br/>
-<span class="k">fun</span> <span class="v">nextHazard</span>(zone: <span class="v">Zone</span>, run: <span class="v">Run</span>): <span class="v">Hazard</span> {<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">pool</span> = hazards[zone] ?: error(<span class="s">"zone"</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">heat</span> = <span class="n">1f</span> + run.streak * <span class="n">0.04f</span>&nbsp;&nbsp;<span class="c">// ramps</span><br/>
-&nbsp;&nbsp;<span class="k">return</span> pool.pickWeighted(rng, heat)<br/>
-}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -1290,29 +1261,29 @@
       <span class="section-eyebrow">Stack</span>
       <h2 class="section-title">Built with.</h2>
       <div class="stack-grid">
+        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#478CBF;--ico-fg:#ffffff;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">G</span>Godot 4.6</span>
+        </span>
+        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#478CBF;--ico-fg:#ffffff;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">GD</span>GDScript</span>
+        </span>
         <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
           <span class="lg-glow"></span>
           <span class="lg-body"><span class="ico">A</span>Android</span>
         </span>
-        <span class="lg is-interactive chip t-violet" style="--ico-bg:#7F52FF;">
+        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#4285F4;--ico-fg:#ffffff;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">K</span>Kotlin</span>
-        </span>
-        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#0d1a2a;--ico-fg:#4ad9ff;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">JC</span>Jetpack Compose</span>
-        </span>
-        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#0d1a2a;--ico-fg:#4ad9ff;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">Cv</span>Canvas / Game Loop</span>
-        </span>
-        <span class="lg is-interactive chip t-amber" style="--ico-bg:#FFA000;--ico-fg:#0a0c14;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">FB</span>Firebase</span>
+          <span class="lg-body"><span class="ico">PG</span>Play Games</span>
         </span>
         <span class="lg is-interactive chip t-mono" style="--ico-bg:#1a1d28;--ico-fg:#a4a4b0;">
           <span class="lg-glow"></span>
           <span class="lg-body"><span class="ico">AM</span>AdMob</span>
+        </span>
+        <span class="lg is-interactive chip t-amber" style="--ico-bg:#FFA000;--ico-fg:#0a0c14;">
+          <span class="lg-glow"></span>
+          <span class="lg-body"><span class="ico">FB</span>Firebase</span>
         </span>
         <span class="lg is-interactive chip t-pink" style="--ico-bg:linear-gradient(135deg,#F24E1E,#A259FF);">
           <span class="lg-glow"></span>
