@@ -1071,7 +1071,7 @@
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </span>
         </a>
-        <a href="Projects.html" class="lg btn btn-sm t-mono">
+        <a href="Projects.html" class="lg btn btn-sm t-mono" style="display:none">
           <span class="lg-glow" aria-hidden="true"></span>
           <span class="lg-body">
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
@@ -1197,27 +1197,45 @@
           <div class="codebox">
             <div class="cb-head">
               <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
-              <span class="cb-title">spaced_repetition.kt</span>
+              <span class="cb-title">DomainAllocator.kt</span>
             </div>
             <div class="cb-body">
-<span class="c">// Lightweight SM-2 style scheduler.</span><br/>
-<span class="c">// A card's interval grows as it's recalled.</span><br/>
+<span class="c">// Assemble a mock exam whose question mix</span><br/>
+<span class="c">// matches the real AWS SAA-C03 weighting.</span><br/>
 <br/>
-<span class="k">fun</span> <span class="v">schedule</span>(card: <span class="v">Card</span>, grade: <span class="v">Grade</span>): <span class="v">Card</span> {<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">ease</span> = (card.ease + <span class="k">when</span> (grade) {<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="v">Grade</span>.<span class="p">EASY</span>&nbsp;&nbsp; -> <span class="n">0.15</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="v">Grade</span>.<span class="p">MEDIUM</span> -> <span class="n">0.0</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="v">Grade</span>.<span class="p">HARD</span>&nbsp;&nbsp; -> <span class="n">-0.20</span><br/>
-&nbsp;&nbsp;}).coerceIn(<span class="n">1.3</span>, <span class="n">2.7</span>)<br/>
+<span class="k">fun</span> <span class="v">allocate</span>(<br/>
+&nbsp;&nbsp;chapters: <span class="v">List</span>&lt;<span class="v">ChapterPool</span>&gt;,<br/>
+&nbsp;&nbsp;targetTotal: <span class="v">Int</span><br/>
+): <span class="v">Map</span>&lt;<span class="v">ExamDomain</span>, <span class="v">Int</span>&gt; {<br/>
 <br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">days</span> = <span class="k">if</span> (grade == <span class="v">Grade</span>.<span class="p">HARD</span>) <span class="n">1</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">else</span> (card.interval * ease).roundToInt()<br/>
+&nbsp;&nbsp;<span class="k">val</span> byDomain = chapters<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.filter { it.examDomain != <span class="k">null</span> }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.groupBy { it.examDomain!! }<br/>
+&nbsp;&nbsp;<span class="k">val</span> totalWeight = byDomain.keys<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.sumOf { <span class="p">EXAM_DOMAIN_WEIGHTS</span>[it] ?: <span class="n">0</span> }<br/>
 <br/>
-&nbsp;&nbsp;<span class="k">return</span> card.copy(<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;ease&nbsp;&nbsp;&nbsp;&nbsp; = ease,<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;interval = days,<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;dueAt&nbsp;&nbsp;&nbsp; = today.plusDays(days)<br/>
-&nbsp;&nbsp;)<br/>
+&nbsp;&nbsp;<span class="c">// target per domain, by exam weight</span><br/>
+&nbsp;&nbsp;<span class="k">val</span> raw = byDomain.mapValues { (d, _) -><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">val</span> w = <span class="p">EXAM_DOMAIN_WEIGHTS</span>[d] ?: <span class="n">0</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;targetTotal.toDouble() * w / totalWeight<br/>
+&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;<span class="k">val</span> target = raw<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.mapValues { it.value.toInt() }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.toMutableMap()<br/>
+<br/>
+&nbsp;&nbsp;<span class="c">// distribute the remainder by</span><br/>
+&nbsp;&nbsp;<span class="c">// largest fraction (Hamilton's method)</span><br/>
+&nbsp;&nbsp;<span class="k">var</span> left = targetTotal - target.values.sum()<br/>
+&nbsp;&nbsp;raw.entries<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.sortedByDescending {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it.value - it.value.toInt()<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.forEach { (d, _) -><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">if</span> (left-- &gt; <span class="n">0</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target[d] = target[d]!! + <span class="n">1</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;<span class="c">// ... split per chapter, capped to capacity</span><br/>
+&nbsp;&nbsp;<span class="k">return</span> target<br/>
 }
             </div>
           </div>
