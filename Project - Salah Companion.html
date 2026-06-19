@@ -623,7 +623,7 @@
   /* ========== TWO-COL: copy + sidebar ========== */
   .two-col {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1fr;
     gap: 26px;
     align-items: start;
   }
@@ -1047,13 +1047,6 @@
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </span>
         </a>
-        <a href="https://abduloski.dev" target="_blank" rel="noopener" class="lg btn btn-sm t-mono">
-          <span class="lg-glow" aria-hidden="true"></span>
-          <span class="lg-body">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
-            Developer site
-          </span>
-        </a>
       </div>
 
       <div class="ph-meta">
@@ -1174,34 +1167,6 @@
             </li>
           </ul>
         </div>
-
-        <div>
-          <div class="codebox">
-            <div class="cb-head">
-              <span class="cb-dot red"></span><span class="cb-dot yel"></span><span class="cb-dot grn"></span>
-              <span class="cb-title">design-tokens.kt</span>
-            </div>
-            <div class="cb-body">
-<span class="c">// Calm-first palette. Green for active state,</span><br/>
-<span class="c">// gold for sacred ornament, dark base for night reads.</span><br/>
-<br/>
-<span class="k">object</span> <span class="v">SalahPalette</span> {<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">surface</span>&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFF0A1F1A</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">surfaceAlt</span> = <span class="v">Color</span>(<span class="s">0xFF14302A</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">active</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFF4EE19A</span>) <span class="c">// salah · qibla</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">sacred</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFF5E7B8</span>) <span class="c">// quran · dhikr</span><br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">textHi</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFFFFFFF</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">textLo</span>&nbsp;&nbsp;&nbsp; = <span class="v">Color</span>(<span class="s">0xFFA4D5B9</span>)<br/>
-}<br/>
-<br/>
-<span class="k">object</span> <span class="v">SalahType</span> {<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">display</span> = <span class="v">FontFamily</span>(<span class="s">"Fraunces Italic"</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">arabic</span>&nbsp; = <span class="v">FontFamily</span>(<span class="s">"Amiri"</span>)<br/>
-&nbsp;&nbsp;<span class="k">val</span> <span class="p">ui</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <span class="v">FontFamily</span>(<span class="s">"Inter"</span>)<br/>
-}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -1276,13 +1241,13 @@
           <span class="lg-glow"></span>
           <span class="lg-body"><span class="ico">A</span>Android</span>
         </span>
-        <span class="lg is-interactive chip t-violet" style="--ico-bg:#7F52FF;">
+        <span class="lg is-interactive chip t-amber" style="--ico-bg:#f89820;--ico-fg:#0a0c14;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">K</span>Kotlin</span>
+          <span class="lg-body"><span class="ico">J</span>Java</span>
         </span>
         <span class="lg is-interactive chip t-cyan" style="--ico-bg:#0d1a2a;--ico-fg:#4ad9ff;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">JC</span>Jetpack Compose</span>
+          <span class="lg-body"><span class="ico">XML</span>XML Layouts</span>
         </span>
         <span class="lg is-interactive chip t-amber" style="--ico-bg:#FFA000;--ico-fg:#0a0c14;">
           <span class="lg-glow"></span>
@@ -1299,10 +1264,6 @@
         <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
           <span class="lg-glow"></span>
           <span class="lg-body"><span class="ico">R</span>Room DB</span>
-        </span>
-        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#1a1d28;--ico-fg:#4ad9ff;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">Co</span>Coroutines</span>
         </span>
       </div>
     </div>
