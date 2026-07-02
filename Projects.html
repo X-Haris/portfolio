@@ -1263,7 +1263,7 @@
   }
 </style>
 </head>
-<body data-theme="dark">
+<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1823,7 +1823,7 @@
 <script>
   (function() {
     var saved = localStorage.getItem('theme');
-    if (saved === 'light') document.body.removeAttribute('data-theme');
+    if (saved === 'dark') document.body.setAttribute('data-theme', 'dark');
     var btn = document.getElementById('themeToggle');
     if (btn) btn.addEventListener('click', function() {
       var isDark = document.body.getAttribute('data-theme') === 'dark';
