@@ -617,6 +617,9 @@
       #c01020 270deg, #ff2030 360deg) !important;
     animation: spin 14s linear infinite, alarm-pulse 0.9s ease-in-out infinite !important;
   }
+  /* Full shatter — the alarm face flares up through the broken pane */
+  .portrait-wrap.shattered .portrait-photo { filter: brightness(0.55) contrast(1.05) saturate(1.1); }
+  .portrait-wrap.shattered .portrait-glass { opacity: 0.55; }
   @keyframes alarm-pulse {
     0%, 100% {
       box-shadow:
@@ -827,12 +830,14 @@
     border-radius: 50%;
     z-index: 0;
     filter: brightness(0.28) contrast(1.04) saturate(0.85);
+    transition: filter 300ms ease;
   }
   /* Dark tinted glass pane in front of the photo — gloss highlight,
      bottom refraction and an interior vignette, all over a dark tint */
   .portrait-glass {
     content: ''; position: absolute; inset: 0; border-radius: 50%;
     z-index: 1; pointer-events: none;
+    transition: opacity 300ms ease;
     background:
       /* large soft gloss highlight on upper-left (bubble curvature) */
       radial-gradient(40% 32% at 32% 22%, rgba(255,255,255,0.50) 0%, rgba(255,255,255,0.16) 35%, rgba(255,255,255,0) 70%),
@@ -1599,9 +1604,9 @@
           <div class="portrait-ring"></div>
           <div class="portrait-cracks"></div>
           <div class="portrait">
-            <img class="portrait-photo" src="assets/robot-face.png" alt="" />
+            <img class="portrait-photo" src="assets/portrait-normal.png" alt="Portrait of Haris" />
             <div class="portrait-glass" aria-hidden="true"></div>
-            <img class="portrait-photo-lit" src="assets/robot-face.png" alt="" />
+            <img class="portrait-photo-lit" src="assets/portrait-normal.png" alt="" />
             <div class="portrait-flashlight" aria-hidden="true"></div>
           </div>
         </div>
@@ -1928,6 +1933,9 @@
     var wrap = document.querySelector('.portrait-wrap');
     var layer = wrap && wrap.querySelector('.portrait-cracks');
     if (!wrap || !layer) return;
+    var photo = wrap.querySelector('.portrait-photo');
+    var photoLit = wrap.querySelector('.portrait-photo-lit');
+    new Image().src = 'assets/portrait-alarm.png'; // preload so the shatter swap is instant
     var crackPoints = []; // existing crack centers in % coords
 
     function makeCrack(xPct, yPct) {
@@ -2075,7 +2083,12 @@
       playCrackSound(clickCount);
       document.body.classList.add('alarm');
       clickCount++;
-      if (clickCount >= 7 && !terminalsSpawned) { makeFullShatter(); spawnTerminals(); }
+      if (clickCount >= 7 && !terminalsSpawned) {
+        makeFullShatter();
+        photo.src = photoLit.src = 'assets/portrait-alarm.png';
+        wrap.classList.add('shattered');
+        spawnTerminals();
+      }
     });
 
     // ===== Fake CMD terminals after 7 clicks =====
