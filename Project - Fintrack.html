@@ -110,7 +110,7 @@
 
   /* ========== LAYOUT ========== */
   .page {
-    max-width: 1120px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 28px 32px 100px;
     position: relative;
@@ -910,7 +910,7 @@
   }
   .work-grid::-webkit-scrollbar { display: none; }
   .work-grid > * {
-    flex: 0 0 calc(23% - 12px);
+    flex: 0 0 calc((100% - 54px) / 4);
     min-width: 0;
     scroll-snap-align: start;
   }
@@ -1058,18 +1058,18 @@
   }
   .work-card:hover .work-cta { color: #fff; }
   @media (max-width: 1200px) {
-    .work-grid > * { flex-basis: calc(30.5% - 11px); }
+    .work-grid > * { flex-basis: calc((100% - 36px) / 3); }
   }
   @media (max-width: 1024px) {
-    .work-grid > * { flex-basis: calc(46% - 8px); }
+    .work-grid > * { flex-basis: calc((100% - 18px) / 2); }
   }
   @media (max-width: 768px) {
     .work-grid { gap: 14px; }
-    .work-grid > * { flex-basis: calc(46% - 7px); }
+    .work-grid > * { flex-basis: calc((100% - 14px) / 2); }
   }
   @media (max-width: 640px) {
     .work-grid { gap: 14px; }
-    .work-grid > * { flex-basis: 86%; }
+    .work-grid > * { flex-basis: 100%; }
     .work-arrow { width: 38px; height: 38px; font-size: 20px; }
     .work-arrow.prev { left: 2px; }
     .work-arrow.next { right: 2px; }

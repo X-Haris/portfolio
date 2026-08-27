@@ -7,7 +7,7 @@
 <title>Abduloski.dev — Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink-0: #f5f7fb;
@@ -28,6 +28,7 @@
 
     --font-sans: 'Inter Tight', system-ui, sans-serif;
     --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   }
 
   * { box-sizing: border-box; }
@@ -976,7 +977,7 @@
   }
   .work-grid::-webkit-scrollbar { display: none; }
   .work-grid > * {
-    flex: 0 0 calc(23% - 12px);
+    flex: 0 0 calc((100% - 54px) / 4);
     min-width: 0;
     scroll-snap-align: start;
   }
@@ -1303,7 +1304,7 @@
   @media (max-width: 1200px) {
     .page { padding: 24px 24px 80px; }
     .hero-inner { padding: 44px 44px; gap: 32px; }
-    .work-grid > * { flex-basis: calc(30.5% - 11px); }
+    .work-grid > * { flex-basis: calc((100% - 36px) / 3); }
   }
   @media (max-width: 1024px) {
     .page { padding: 20px 20px 72px; }
@@ -1316,7 +1317,7 @@
     .hero-card .cta-row { justify-content: center; flex-wrap: wrap; width: auto; }
     .hero-card .cta-row > .lg { flex: 0 0 auto; width: auto; }
     .hero p { margin-left: auto; margin-right: auto; }
-    .work-grid > * { flex-basis: calc(46% - 8px); }
+    .work-grid > * { flex-basis: calc((100% - 18px) / 2); }
     .bottom-row { grid-template-columns: 1fr; }
     .contact-channels { grid-template-columns: 1fr 1fr; }
     .plain-inner { padding: 32px 32px; }
@@ -1328,7 +1329,7 @@
     .hero-inner { padding: 28px 22px; }
     .plain-inner { padding: 26px 24px; }
     .work-grid { gap: 14px; }
-    .work-grid > * { flex-basis: calc(46% - 7px); }
+    .work-grid > * { flex-basis: calc((100% - 14px) / 2); }
     .skills .lg-body, .about .lg-body { padding: 26px 24px 28px; }
     .plain-card.contact .plain-inner { padding: 36px 24px 32px; }
     .contact-channels { grid-template-columns: 1fr; }
@@ -1372,7 +1373,7 @@
     .brand { font-size: 14px; margin-right: auto; min-width: 0; overflow: hidden; }
     .brand-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .work-grid { gap: 14px; }
-    .work-grid > * { flex-basis: 86%; }
+    .work-grid > * { flex-basis: 100%; }
     .work-arrow { width: 38px; height: 38px; font-size: 20px; }
     .work-arrow.prev { left: 2px; }
     .work-arrow.next { right: 2px; }
@@ -1703,7 +1704,7 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
               </span>
             </div>
             <div class="socials">
-              <button class="lg icon-btn t-cyan" title="Email">
+              <button class="lg icon-btn t-cyan" title="Email" onclick="location.href='mailto:hello@abduloski.dev'">
                 <span class="lg-glow" aria-hidden="true"></span>
                 <span class="lg-body">
                   <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7M21 5v6h-6"/></svg>
