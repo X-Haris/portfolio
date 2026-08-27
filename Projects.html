@@ -383,6 +383,8 @@
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #4ad9ff, rgba(74,217,255,0.4) 60%, transparent 90%); }
   .t-violet { --lg-core: #9b7bff; --lg-deep: rgba(12,10,28,0.42); --lg-edge: rgba(5,4,20,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #9b7bff, rgba(155,123,255,0.4) 60%, transparent 90%); }
+  .t-blue   { --lg-core: #5a8cff; --lg-deep: rgba(8,16,34,0.42); --lg-edge: rgba(3,7,20,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #5a8cff, rgba(90,140,255,0.4) 60%, transparent 90%); }
   .t-pink   { --lg-core: #ff5fb3; --lg-deep: rgba(28,8,32,0.42); --lg-edge: rgba(20,4,12,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #ff5fb3, rgba(255,95,179,0.4) 60%, transparent 90%); }
   .t-aqua   { --lg-core: #4ee19a; --lg-deep: rgba(6,22,14,0.42); --lg-edge: rgba(2,10,6,0.58);
@@ -1016,6 +1018,18 @@
   .proj-card { border-radius: var(--r-card-sm); cursor: pointer; }
   .proj-card .lg-body { padding: 18px 18px 22px; }
 
+  /* Grid rows stretch each <article> to the tallest, but the glass panel inside
+     only grew to fit its own text — a shorter description left the card ending
+     early. Fill it, and pin the footer to the bottom so they line up. */
+  .proj-card { display: flex; }
+  .proj-card > .lg-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .proj-card .proj-thumb { flex: 0 0 auto; }
+  .proj-card .proj-foot { margin-top: auto; }
+
   /* Stretched anchor — for cards that link externally (target=_blank) */
   .proj-card .card-link {
     position: absolute;
@@ -1264,6 +1278,10 @@
 </style>
 </head>
 <body>
+<script>/* Applied before the page paints. The toggle wiring lives at the end of
+   <body>, but waiting until then meant every navigation rendered light first
+   and flipped to dark afterwards, which read as the theme not being remembered. */
+try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-theme','dark');}catch(e){}</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1368,6 +1386,20 @@
       </div>
 
       <div class="projects-grid">
+
+        <article class="lg is-interactive proj-card t-violet" data-cat="mobile" style="cursor:pointer;" onclick="location.href='Project - Velvet Noise.html'">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <div class="lg-body">
+            <div class="proj-meta"><span class="work-tag">Mobile · Music &amp; Audio</span><span class="proj-year">2026</span></div>
+            <div class="proj-thumb sc-thumb">
+              <img class="sc-phone" src="https://play-lh.googleusercontent.com/oe4AYe00qELeDKsS-HCHN6ufd7TKOHLp_AeKe0IN3Aw4aH_q8rYDMakvotytSo5IR8sEJGQeWOj4geWStBGM=w400" alt="Velvet Noise sound library" loading="lazy"/>
+              <img class="sc-phone" src="https://play-lh.googleusercontent.com/Z-namruuQo3iygm5vT1pxE9YVsWA8Fim-PSexQqnnv9Pbia3_NciqZV7YvHnRvkzMkE7X6-_bMJ8J3YYbtGkpw=w400" alt="Velvet Noise three-layer mixer" loading="lazy"/>
+            </div>
+            <h3>Velvet Noise</h3>
+            <p class="desc">A sound machine for sleep &amp; focus — 30+ offline sounds, a three-layer mixer &amp; a 10-band equaliser.</p>
+            <div class="proj-foot"><span class="proj-client">Google Play</span><span class="proj-arrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+          </div>
+        </article>
 
         <article class="lg is-interactive proj-card t-amber" data-cat="mobile" style="cursor:pointer;" onclick="location.href='Project - PocketCloud.html'">
           <span class="lg-glow" aria-hidden="true"></span>
@@ -1578,6 +1610,19 @@
             <h3>Salah Companion</h3>
             <p class="desc">All-in-one Islamic app — Quran, prayer times, Qibla &amp; Salah guide. 5K+ downloads · 4.8★</p>
             <div class="proj-foot"><span class="proj-client">Google Play</span><span class="proj-arrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+          </div>
+        </article>
+
+        <article class="lg is-interactive proj-card t-blue" data-cat="website" style="cursor:pointer;" onclick="location.href='Project - Empire State Mechanical.html'">
+          <span class="lg-glow" aria-hidden="true"></span>
+          <div class="lg-body">
+            <div class="proj-meta"><span class="work-tag">Website · HVAC</span><span class="proj-year">2026</span></div>
+            <div class="proj-thumb sc-thumb" style="padding:0;">
+              <img src="assets/esmc/thumb.webp" alt="Empire State Mechanical homepage" loading="lazy" style="width:100%;height:100%;object-fit:contain;object-position:center;padding:12px;border-radius:14px;"/>
+            </div>
+            <h3>Empire State Mechanical</h3>
+            <p class="desc">Marketing site for a family-owned NYC HVAC company — nine hand-written pages, no framework, source public on GitHub.</p>
+            <div class="proj-foot"><span class="proj-client">esmc.nyc</span><span class="proj-arrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
           </div>
         </article>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Salah Companion — Case study · Abduloski.dev</title>
+<title>Empire State Mechanical — Case study · Abduloski.dev</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -186,6 +186,8 @@
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #4ad9ff, rgba(74,217,255,0.4) 60%, transparent 90%); }
   .t-violet { --lg-core: #9b7bff; --lg-deep: rgba(12,10,28,0.42); --lg-edge: rgba(5,4,20,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #9b7bff, rgba(155,123,255,0.4) 60%, transparent 90%); }
+  .t-blue   { --lg-core: #5a8cff; --lg-deep: rgba(8,16,34,0.42); --lg-edge: rgba(3,7,20,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #5a8cff, rgba(90,140,255,0.4) 60%, transparent 90%); }
   .t-pink   { --lg-core: #ff5fb3; --lg-deep: rgba(28,8,32,0.42); --lg-edge: rgba(20,4,12,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #ff5fb3, rgba(255,95,179,0.4) 60%, transparent 90%); }
   .t-aqua   { --lg-core: #4ee19a; --lg-deep: rgba(6,22,14,0.42); --lg-edge: rgba(2,10,6,0.58);
@@ -950,8 +952,11 @@
     box-shadow: 0 24px 50px -18px rgba(0,0,0,0.7);
   }
   .ss-slide img { width: 100%; height: auto; display: block; }
-  @media (min-width: 640px)  { .ss-slide { width: 44%; } }
-  @media (min-width: 1000px) { .ss-slide { width: 30%; } }
+  /* Landscape site captures, not portrait phone shots — wider slides so the
+     page content inside them stays legible. */
+  .ss-slide { width: 88%; }
+  @media (min-width: 640px)  { .ss-slide { width: 70%; } }
+  @media (min-width: 1000px) { .ss-slide { width: 56%; } }
   .ss-slide figcaption {
     position: absolute; left: 0; right: 0; bottom: 0;
     padding: 22px 16px 12px;
@@ -983,8 +988,6 @@
      homepage rather than a second, different-looking one.
      --------------------------------------------------------------- */
   .plain-inner .work-card .desc { color: rgba(255,255,255,0.75); }
-  .t-blue { --lg-core: #5a8cff; --lg-deep: rgba(8,16,34,0.42); --lg-edge: rgba(3,7,20,0.58);
-              --lg-glow: radial-gradient(50% 60% at 50% 30%, #5a8cff, rgba(90,140,255,0.4) 60%, transparent 90%); }
   .work-slider {
     position: relative;
     /* each card's .lg-glow blooms ~155px below it; this is how much of that we
@@ -1235,17 +1238,17 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
         Back to all projects
       </a>
 
-      <span class="ph-tag"><span class="dot"></span>Mobile app · Lifestyle</span>
+      <span class="ph-tag"><span class="dot"></span>Website · HVAC</span>
 
-      <h1 class="ph-title">Salah <span class="grad">Companion</span></h1>
+      <h1 class="ph-title">Empire State <span class="grad">Mechanical</span></h1>
 
-      <p class="ph-sub">A complete Islamic companion for the modern Muslim — Quran reading, prayer times, Qibla, a step-by-step Salah guide, word-by-word memorisation and a Hijri calendar, all in one calm, focused Android app.</p>
+      <p class="ph-sub">A marketing site for a family-owned HVAC company serving Staten Island, Brooklyn and New Jersey. Nine hand-written pages, no framework and no build step — plain files served from GitHub Pages behind their own domain.</p>
 
       <div class="ph-row">
-        <a href="https://play.google.com/store/apps/details?id=com.haris.salahcompanion" target="_blank" rel="noopener" class="lg btn t-cyan">
+        <a href="https://esmc.nyc/" target="_blank" rel="noopener" class="lg btn t-blue">
           <span class="lg-glow" aria-hidden="true"></span>
           <span class="lg-body">
-            Get it on Google Play
+            Visit the site
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </span>
         </a>
@@ -1253,8 +1256,8 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
 
       <div class="ph-meta">
         <div>
-          <span class="lbl">Client</span>
-          <span class="val">Personal product</span>
+          <span class="lbl">Built for</span>
+          <span class="val">Empire State Mechanical</span>
         </div>
         <div>
           <span class="lbl">Role</span>
@@ -1262,11 +1265,11 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
         </div>
         <div>
           <span class="lbl">Released</span>
-          <span class="val">2025 · still shipping</span>
+          <span class="val">2026 · still shipping</span>
         </div>
         <div>
           <span class="lbl">Platform</span>
-          <span class="val">Android · Google Play</span>
+          <span class="val">Web · GitHub Pages</span>
         </div>
       </div>
     </div>
@@ -1277,12 +1280,12 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
     <div class="shot-slider">
       <button class="ss-arrow prev" aria-label="Previous screenshot">‹</button>
       <div class="ss-track">
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/gSD0NAtKKeFgRH208ZP-BBZrzi8Zb5yxmkFFYWL9GP7GcxA-EPCtJ-CxsPpn5Gw6wWudkWuTqXFMOeFPg6d6D5Q=w800" alt="01 · Today’s prayers"/><figcaption>01 · Today’s prayers</figcaption></figure>
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/owF_GEWL1JWgNrHTEimv7zg-ijnhkov7ZLr7aD8bmawUxMQCVdhETL5M1pmqvvecvNMK0rtbWwrCCbfXyIQDmg=w800" alt="02 · Quran reader"/><figcaption>02 · Quran reader</figcaption></figure>
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/FKkFArSIBZdY6mhMYwiS1bExtRtLobxVbqxIq2sJdjNYSUf6i3M_bYuidru26FmG1lWjvm5oSPNDfg8ssRzdWg=w800" alt="03 · Qibla compass"/><figcaption>03 · Qibla compass</figcaption></figure>
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/nTA0FiKOruFU-Br5I2fMxhIVtLayQkKgNk7bwDf4SsM3tGYZnb0mqdhP8FydUG7c74xsu9w8J5pjK27Eo7q9GP8=w800" alt="04 · Salah guide"/><figcaption>04 · Salah guide</figcaption></figure>
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/mqGMnvJQW8AP0VGWxxuwSR7lD7RchLZiuLXDpwSNhnirXggtRbQA6xgZoV0npmJHlBwsPRANzKMYNxnKlqnM5g=w800" alt="05 · Word-by-word"/><figcaption>05 · Word-by-word</figcaption></figure>
-        <figure class="ss-slide"><img src="https://play-lh.googleusercontent.com/ohAu54Tok0zMLJgXDWMO7mmau9MuODPaNky46O59d4UK0DazyGLWHmPoykLyZL94aGIZXyC68WNm5UmB1zc3=w800" alt="06 · Hijri calendar"/><figcaption>06 · Hijri calendar</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/home.webp" alt="01 · Home" decoding="async"/><figcaption>01 · Home</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/about.webp" alt="02 · About" loading="lazy" decoding="async"/><figcaption>02 · About</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/air.webp" alt="03 · Air conditioning" loading="lazy" decoding="async"/><figcaption>03 · Air conditioning</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/heating.webp" alt="04 · Heating" loading="lazy" decoding="async"/><figcaption>04 · Heating</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/install.webp" alt="05 · New installations" loading="lazy" decoding="async"/><figcaption>05 · New installations</figcaption></figure>
+        <figure class="ss-slide"><img src="assets/esmc/replace.webp" alt="06 · Finished jobs" loading="lazy" decoding="async"/><figcaption>06 · Finished jobs</figcaption></figure>
       </div>
       <button class="ss-arrow next" aria-label="Next screenshot">›</button>
     </div>
@@ -1292,79 +1295,79 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
   <section class="plain-card">
     <div class="plain-inner">
       <span class="section-eyebrow">Overview</span>
-      <h2 class="section-title">A complete Islamic toolkit —<br/>quiet enough to use every day.</h2>
-      <p class="section-body">Most Islamic apps either lean on heavy ornament or scatter every feature on the home screen. The brief I set for myself was simpler: design a workspace a tired parent, a new revert, and a lifelong reciter would all open without thinking — calm typography, one clear next action, every utility one tap away.</p>
+      <h2 class="section-title">Nine pages, no framework,<br/>and nothing to install.</h2>
+      <p class="section-body">A small HVAC company needs a site that loads on a phone in someone's driveway, makes the phone number impossible to miss, and costs nothing to keep running. That ruled out a CMS and a build pipeline. Everything here is hand-written HTML, CSS and JavaScript, served as static files.</p>
 
       <div class="narrative">
-        <div class="narr-card" style="--num:#ff5fb3;">
+        <div class="narr-card" style="--num:#5a8cff;">
           <div class="narr-num"><span class="glyph"></span>01 · The brief</div>
-          <h3>Too many apps. Too much noise.</h3>
-          <p>The category is crowded and visually loud. I wanted one app that covered Quran, prayer, Qibla and learning — without the cluttered home screens, ads-first layouts or pixel-art ornament that define most competitors.</p>
+          <h3>Trades sites all look the same.</h3>
+          <p>The category runs on templates: stock photography, a contact box nobody answers, and a phone number you have to hunt for. This one had to look like a company you would trust with your boiler in January.</p>
         </div>
         <div class="narr-card" style="--num:#4ad9ff;">
           <div class="narr-num"><span class="glyph"></span>02 · The approach</div>
-          <h3>One next action, every time.</h3>
-          <p>Every screen leads with the next decision the user actually wants — the next prayer, the next verse, the direction of Makkah. Drilldowns slide in instead of navigating away. Tajweed audio is downloaded for offline use.</p>
+          <h3>Phone number first, copy second.</h3>
+          <p>The 24/7 number sits in the header of every page. Each service gets its own page carrying real photographs of finished jobs rather than stock units, so the work argues for itself before a word of copy does.</p>
         </div>
         <div class="narr-card" style="--num:#4ee19a;">
-          <div class="narr-num"><span class="glyph"></span>03 · The outcome</div>
-          <h3>A daily-driver app, organically grown.</h3>
-          <p>4.8★ from 38 reviews, 5,000+ downloads on Google Play with no paid marketing. Users describe it as “straightforward,” “clean,” and “the one I kept after deleting the rest.”</p>
+          <div class="narr-num"><span class="glyph"></span>03 · In practice</div>
+          <h3>Static files, so there is nothing to go down.</h3>
+          <p>No database, no server, no dependencies to patch. Pages are plain HTML on GitHub Pages behind a custom domain, photos ship as WebP with JPEG fallbacks, and a sitemap plus robots.txt keep every service page indexable.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================ FEATURES + CODE -->
+  <!-- ============================================================ FEATURES -->
   <section class="plain-card">
     <div class="plain-inner">
       <span class="section-eyebrow">What we shipped</span>
       <div class="two-col">
         <div>
-          <h2 class="section-title">Six tools in one app,<br/>each earning its slot.</h2>
-          <p class="section-body">Nothing on the home screen exists for decoration. Every feature solves a specific daily task — prayer, recitation, direction, memorisation, calendar, charity — and gets out of the way once the user has what they came for.</p>
+          <h2 class="section-title">Everything a customer needs<br/>before they pick up the phone.</h2>
+          <p class="section-body">The site answers the three questions someone has during a breakdown — do you handle this, have you done it before, and how fast can you get here — and then makes calling the obvious next step.</p>
 
           <ul class="feature-list">
             <li>
-              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></span>
               <div>
-                <h4>Accurate prayer times</h4>
-                <p>Auto-located salah times with customisable notifications and a countdown to the next prayer.</p>
-              </div>
-            </li>
-            <li>
-              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3l3 6 6 1-4.5 4 1 6L12 17l-5.5 3 1-6L3 10l6-1z"/></svg></span>
-              <div>
-                <h4>Live Qibla compass</h4>
-                <p>Magnetometer-driven direction to Makkah with a Kaaba marker, distance and a calm pulse animation.</p>
-              </div>
-            </li>
-            <li>
-              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h12a4 4 0 010 8H4z"/><path d="M4 5v14h12a4 4 0 004-4"/></svg></span>
-              <div>
-                <h4>Full Quran with word-by-word audio</h4>
-                <p>Tap any word for individual playback. Synchronised highlighting, loop a verse, audio caches offline.</p>
+                <h4>Nine pages, one stylesheet</h4>
+                <p>Home, about, five service pages, plus privacy and terms — every one of them sharing a single <code>styles.css</code> and <code>script.js</code>.</p>
               </div>
             </li>
             <li>
               <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>
               <div>
-                <h4>Step-by-step Salah guide</h4>
-                <p>Illustrated instructions for Wudu, 2/3/4 rakah prayers, with jumps into the relevant Surah or Dua.</p>
+                <h4>A page per service</h4>
+                <p>Air conditioning, heating, new installations, system replacement and maintenance plans each get their own page, each ending in a gallery of jobs actually finished.</p>
               </div>
             </li>
             <li>
-              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></span>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .3 1.9.6 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.5 2.8.6a2 2 0 011.7 2z"/></svg></span>
               <div>
-                <h4>Hijri calendar &amp; fasting tracker</h4>
-                <p>Reminders for Ramadan, Eid, and significant days; logs voluntary fasts with running statistics.</p>
+                <h4>A 24/7 number that never scrolls away</h4>
+                <p>The call line lives in the header on every page and stays reachable on mobile, because an emergency call is worth more than a form submission.</p>
               </div>
             </li>
             <li>
-              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg></span>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg></span>
               <div>
-                <h4>Hasanat counter &amp; Zakat calculator</h4>
-                <p>Estimates reward letters as you read, and a built-in Zakat tool that handles cash, gold, and assets.</p>
+                <h4>A quote form that asks the right things</h4>
+                <p>Service needed, how soon, property type and town or ZIP — structured fields that let the office triage a job, instead of one anonymous message box.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+              <div>
+                <h4>Built to be found</h4>
+                <p>A sitemap and robots.txt, per-page titles and descriptions, and an Open Graph card so a link shared in a text message looks like the business, not a bare URL.</p>
+              </div>
+            </li>
+            <li>
+              <span class="fl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5.5 5.5L8 14l-5 5"/></svg></span>
+              <div>
+                <h4>WebP photography with fallbacks</h4>
+                <p>Every job photo ships as WebP with a JPEG or PNG alongside it, so the galleries stay sharp without costing a customer their data plan.</p>
               </div>
             </li>
           </ul>
@@ -1373,29 +1376,31 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
     </div>
   </section>
 
-  
-
-  <!-- ============================================================ RESULTS -->
+  <!-- ============================================================ INSIDE THE BUILD -->
   <section class="plain-card">
     <div class="plain-inner">
-      <span class="section-eyebrow">Results</span>
-      <h2 class="section-title">Reception so far.</h2>
-      <p class="section-body">All numbers below are from the live Google Play listing. The app launched without a marketing budget; growth is entirely organic word-of-mouth.</p>
+      <span class="section-eyebrow">Inside the build</span>
+      <h2 class="section-title">What it's made of.</h2>
+      <p class="section-body">The whole repository is public, so none of this has to be taken on trust — the numbers below describe what is actually in it.</p>
 
       <div class="results">
-        <div class="lg result-tile t-aqua">
+        <div class="lg result-tile t-blue">
           <span class="lg-glow" aria-hidden="true"></span>
           <div class="lg-body">
-            <div class="r-num">4.8<span class="unit">★</span></div>
-            <div class="r-lbl">average rating across 38 verified Play Store reviews</div>
+            <div class="r-num">9<span class="unit"> pages</span></div>
+            <div class="r-lbl">hand-written HTML, all sharing one stylesheet and one script</div>
             <div class="r-spark">
               <svg viewBox="0 0 200 32" preserveAspectRatio="none">
-                <g fill="rgba(255,255,255,0.9)">
-                  <polygon points="10,4 12.5,10.5 19,10.5 13.8,14.5 15.8,21 10,17 4.2,21 6.2,14.5 1,10.5 7.5,10.5"/>
-                  <polygon points="50,4 52.5,10.5 59,10.5 53.8,14.5 55.8,21 50,17 44.2,21 46.2,14.5 41,10.5 47.5,10.5"/>
-                  <polygon points="90,4 92.5,10.5 99,10.5 93.8,14.5 95.8,21 90,17 84.2,21 86.2,14.5 81,10.5 87.5,10.5"/>
-                  <polygon points="130,4 132.5,10.5 139,10.5 133.8,14.5 135.8,21 130,17 124.2,21 126.2,14.5 121,10.5 127.5,10.5"/>
-                  <polygon fill="rgba(255,255,255,0.4)" points="170,4 172.5,10.5 179,10.5 173.8,14.5 175.8,21 170,17 164.2,21 166.2,14.5 161,10.5 167.5,10.5"/>
+                <g fill="rgba(255,255,255,0.85)">
+                  <rect x="2"   y="6" width="18" height="20" rx="3"/>
+                  <rect x="24"  y="6" width="18" height="20" rx="3"/>
+                  <rect x="46"  y="6" width="18" height="20" rx="3"/>
+                  <rect x="68"  y="6" width="18" height="20" rx="3"/>
+                  <rect x="90"  y="6" width="18" height="20" rx="3"/>
+                  <rect x="112" y="6" width="18" height="20" rx="3"/>
+                  <rect x="134" y="6" width="18" height="20" rx="3"/>
+                  <rect x="156" y="6" width="18" height="20" rx="3"/>
+                  <rect x="178" y="6" width="18" height="20" rx="3"/>
                 </g>
               </svg>
             </div>
@@ -1404,27 +1409,23 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
         <div class="lg result-tile t-cyan">
           <span class="lg-glow" aria-hidden="true"></span>
           <div class="lg-body">
-            <div class="r-num">5K<span class="unit">+</span></div>
-            <div class="r-lbl">organic downloads on Google Play · zero paid marketing</div>
+            <div class="r-num">0<span class="unit"> deps</span></div>
+            <div class="r-lbl">no framework, no build step, nothing to install or keep patched</div>
             <div class="r-spark">
               <svg viewBox="0 0 200 32" preserveAspectRatio="none">
-                <polyline points="0,28 30,26 60,22 90,18 120,14 150,10 180,6 200,4" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+                <line x1="0" y1="16" x2="200" y2="16" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-dasharray="6 6"/>
               </svg>
             </div>
           </div>
         </div>
-        <div class="lg result-tile t-violet">
+        <div class="lg result-tile t-aqua">
           <span class="lg-glow" aria-hidden="true"></span>
           <div class="lg-body">
-            <div class="r-num">3<span class="unit"> langs</span></div>
-            <div class="r-lbl">English, French and Bosnian — day-one localisation for the core audience</div>
+            <div class="r-num">100<span class="unit">% static</span></div>
+            <div class="r-lbl">plain files on GitHub Pages, served from esmc.nyc</div>
             <div class="r-spark">
               <svg viewBox="0 0 200 32" preserveAspectRatio="none">
-                <g font-family="Inter Tight, sans-serif" font-size="12" fill="rgba(255,255,255,0.85)" font-weight="600">
-                  <text x="0" y="22">EN</text>
-                  <text x="80" y="22">FR</text>
-                  <text x="160" y="22">BS</text>
-                </g>
+                <polyline points="0,26 40,26 40,10 90,10 90,20 140,20 140,6 200,6" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
               </svg>
             </div>
           </div>
@@ -1439,33 +1440,21 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
       <span class="section-eyebrow">Stack</span>
       <h2 class="section-title">Built with.</h2>
       <div class="stack-grid">
-        <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
+        <span class="lg is-interactive chip t-amber" style="--ico-bg:#e34f26;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">A</span>Android</span>
+          <span class="lg-body"><span class="ico">H5</span>HTML</span>
         </span>
-        <span class="lg is-interactive chip t-amber" style="--ico-bg:#f89820;--ico-fg:#0a0c14;">
+        <span class="lg is-interactive chip t-blue" style="--ico-bg:#2965f1;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">J</span>Java</span>
+          <span class="lg-body"><span class="ico">C3</span>CSS</span>
         </span>
-        <span class="lg is-interactive chip t-cyan" style="--ico-bg:#0d1a2a;--ico-fg:#4ad9ff;">
+        <span class="lg is-interactive chip t-amber" style="--ico-bg:#f7df1e;--ico-fg:#0a0c14;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">XML</span>XML Layouts</span>
+          <span class="lg-body"><span class="ico">JS</span>JavaScript</span>
         </span>
-        <span class="lg is-interactive chip t-amber" style="--ico-bg:#FFA000;--ico-fg:#0a0c14;">
+        <span class="lg is-interactive chip t-mono" style="--ico-bg:#0a0c14;">
           <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">FB</span>Firebase</span>
-        </span>
-        <span class="lg is-interactive chip t-pink" style="--ico-bg:linear-gradient(135deg,#F24E1E,#A259FF);">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">F</span>Figma</span>
-        </span>
-        <span class="lg is-interactive chip t-mono" style="--ico-bg:#1a1d28;--ico-fg:#f5e7b8;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">M3</span>Material 3</span>
-        </span>
-        <span class="lg is-interactive chip t-aqua" style="--ico-bg:#1a1d28;--ico-fg:#4ee19a;">
-          <span class="lg-glow"></span>
-          <span class="lg-body"><span class="ico">R</span>Room DB</span>
+          <span class="lg-body"><span class="ico">GH</span>GitHub Pages</span>
         </span>
       </div>
     </div>
@@ -1552,25 +1541,24 @@ try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-t
               </a>
             </div>
           </article>
-        <!-- Website, not an app — keep this card last in the track. -->
-        <article class="lg is-interactive work-card t-blue">
-          <span class="lg-glow" aria-hidden="true"></span>
-          <a href="Project - Empire State Mechanical.html" class="card-link" aria-label="Empire State Mechanical case study"></a>
-          <div class="lg-body">
-            <span class="work-tag">Website · HVAC</span>
-            <div class="work-thumb">
-              <div class="work-site">
-                <div class="bar"><i></i><i></i><i></i><span class="url">esmc.nyc</span></div>
-                <div class="body"><img class="shot" src="assets/esmc/thumb.webp" alt="Empire State Mechanical homepage" loading="lazy"/></div>
+          <article class="lg is-interactive work-card t-aqua" onclick="location.href='Project - Salah Companion.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · Lifestyle</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/owF_GEWL1JWgNrHTEimv7zg-ijnhkov7ZLr7aD8bmawUxMQCVdhETL5M1pmqvvecvNMK0rtbWwrCCbfXyIQDmg=w400" alt="Salah Companion Quran" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/gSD0NAtKKeFgRH208ZP-BBZrzi8Zb5yxmkFFYWL9GP7GcxA-EPCtJ-CxsPpn5Gw6wWudkWuTqXFMOeFPg6d6D5Q=w400" alt="Salah Companion prayer times" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/FKkFArSIBZdY6mhMYwiS1bExtRtLobxVbqxIq2sJdjNYSUf6i3M_bYuidru26FmG1lWjvm5oSPNDfg8ssRzdWg=w400" alt="Salah Companion Qibla" loading="lazy"/>
+                </div>
               </div>
+              <h3>Salah Companion</h3>
+              <p class="desc">All-in-one Islamic app — Quran, prayer times &amp; Qibla · 4.8★</p>
+              <a href="Project - Salah Companion.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
             </div>
-            <h3>Empire State Mechanical</h3>
-            <p class="desc">Marketing site for a family-owned NYC HVAC company · nine pages, no framework, source on GitHub</p>
-            <a href="Project - Empire State Mechanical.html" class="work-cta">View project
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
-            </a>
-          </div>
-        </article>
+          </article>
 
         </div>
         <button class="work-arrow next" id="workNext" aria-label="More projects" type="button">›</button>

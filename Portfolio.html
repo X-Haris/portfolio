@@ -387,6 +387,8 @@
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #4ad9ff, rgba(74,217,255,0.4) 60%, transparent 90%); }
   .t-violet { --lg-core: #9b7bff; --lg-deep: rgba(12,10,28,0.42); --lg-edge: rgba(5,4,20,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #9b7bff, rgba(155,123,255,0.4) 60%, transparent 90%); }
+  .t-blue   { --lg-core: #5a8cff; --lg-deep: rgba(8,16,34,0.42); --lg-edge: rgba(3,7,20,0.58);
+              --lg-glow: radial-gradient(50% 60% at 50% 30%, #5a8cff, rgba(90,140,255,0.4) 60%, transparent 90%); }
   .t-pink   { --lg-core: #ff5fb3; --lg-deep: rgba(28,8,32,0.42); --lg-edge: rgba(20,4,12,0.58);
               --lg-glow: radial-gradient(50% 60% at 50% 30%, #ff5fb3, rgba(255,95,179,0.4) 60%, transparent 90%); }
   .t-aqua   { --lg-core: #4ee19a; --lg-deep: rgba(6,22,14,0.42); --lg-edge: rgba(2,10,6,0.58);
@@ -946,11 +948,62 @@
   }
 
   /* Work grid */
-  .work-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+  /* Featured work carousel — same mechanic as the shot slider on the project
+     pages: a native scroll-snap track with arrow buttons layered over it. Five
+     cards never divide evenly into a wrapping grid, so they scroll instead of
+     leaving a stray card alone on a second row. */
+  .work-slider {
+    position: relative;
+    /* each card's .lg-glow blooms ~155px below it; this is how much of that we
+       keep before the track clips it */
+    --glow-room: 56px;
   }
+  .work-grid {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    /* MUST be explicit. Setting only overflow-x leaves overflow-y at `visible`,
+       which the spec then computes to `auto` — giving the track a stray
+       up/down scroll of whatever the card glows overflow by. */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* bottom padding is headroom for the glow, not layout — the negative
+       margin hands the space back so section spacing is unchanged */
+    padding: 6px 2px var(--glow-room);
+    margin-bottom: calc(12px - var(--glow-room));
+  }
+  .work-grid::-webkit-scrollbar { display: none; }
+  .work-grid > * {
+    flex: 0 0 calc(23% - 12px);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  .work-arrow {
+    position: absolute; top: calc(50% - (var(--glow-room) - 6px) / 2); transform: translateY(-50%);
+    width: 42px; height: 42px; border-radius: var(--r-pill);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(20,30,50,0.14);
+    color: #1a1d28; font-size: 22px; line-height: 1; cursor: pointer;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 10px 24px -8px rgba(10,14,30,0.45);
+    z-index: 6;
+    transition: background 160ms, opacity 200ms, visibility 200ms;
+  }
+  .work-arrow:hover { background: #fff; }
+  .work-arrow.prev { left: -4px; }
+  .work-arrow.next { right: -4px; }
+  /* nothing left to scroll in that direction */
+  .work-arrow.is-off { opacity: 0; visibility: hidden; pointer-events: none; }
+  body[data-theme="dark"] .work-arrow {
+    background: rgba(24,28,40,0.86);
+    border-color: rgba(255,255,255,0.16);
+    color: #f5f7fb;
+  }
+  body[data-theme="dark"] .work-arrow:hover { background: rgba(38,44,60,0.95); }
   .work-card { border-radius: var(--r-card-sm); cursor: pointer; min-width: 0; }
   .work-card .work-cta { pointer-events: none; }
 
@@ -994,6 +1047,24 @@
   }
   .work-card.lg { /* opt into hover effect */ }
   .work-card .lg-body { padding: 18px 18px 22px; }
+
+  /* The cards sit in one flex line, so each <article> already stretches to the
+     tallest — but the glass panel inside only grew to fit its own text, so a
+     card with a two-line description ended ~20px short and looked broken.
+     Fill the card, then pin the CTA to the bottom so every "View project"
+     lines up across the row. */
+  .work-card { display: flex; }
+  .work-card > .lg-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  /* these two hug their text — a column flex parent would otherwise stretch
+     them to the full card width */
+  .work-card .work-tag,
+  .work-card .work-cta { align-self: flex-start; }
+  .work-card .work-thumb { flex: 0 0 auto; }
+  .work-card .work-cta { margin-top: auto; }
 
   .work-tag {
     display: inline-flex;
@@ -1061,6 +1132,12 @@
     font-family: monospace; font-size: 11px; color: rgba(255,255,255,0.5);
     background:
       repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 8px, transparent 8px 16px);
+  }
+  /* a real capture of the site, filling the frame from the top down */
+  .work-site .shot {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
   }
 
   .work-card h3 {
@@ -1168,12 +1245,6 @@
     margin: 0 0 14px;
     padding-right: 0.15em;
   }
-    font-size: clamp(44px, 5vw, 68px);
-    line-height: 1.02;
-    letter-spacing: -0.025em;
-    color: #0a0c14;
-    margin: 0 0 18px;
-  }
   .contact-title .grad {
     background: linear-gradient(95deg, #4ad9ff 0%, #9b7bff 50%, #ff5fb3 100%);
     -webkit-background-clip: text;
@@ -1232,7 +1303,7 @@
   @media (max-width: 1200px) {
     .page { padding: 24px 24px 80px; }
     .hero-inner { padding: 44px 44px; gap: 32px; }
-    .work-grid { grid-template-columns: repeat(3, 1fr); }
+    .work-grid > * { flex-basis: calc(30.5% - 11px); }
   }
   @media (max-width: 1024px) {
     .page { padding: 20px 20px 72px; }
@@ -1245,7 +1316,7 @@
     .hero-card .cta-row { justify-content: center; flex-wrap: wrap; width: auto; }
     .hero-card .cta-row > .lg { flex: 0 0 auto; width: auto; }
     .hero p { margin-left: auto; margin-right: auto; }
-    .work-grid { grid-template-columns: repeat(2, 1fr); }
+    .work-grid > * { flex-basis: calc(46% - 8px); }
     .bottom-row { grid-template-columns: 1fr; }
     .contact-channels { grid-template-columns: 1fr 1fr; }
     .plain-inner { padding: 32px 32px; }
@@ -1256,7 +1327,8 @@
     .page { padding: 16px 14px 64px; }
     .hero-inner { padding: 28px 22px; }
     .plain-inner { padding: 26px 24px; }
-    .work-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .work-grid { gap: 14px; }
+    .work-grid > * { flex-basis: calc(46% - 7px); }
     .skills .lg-body, .about .lg-body { padding: 26px 24px 28px; }
     .plain-card.contact .plain-inner { padding: 36px 24px 32px; }
     .contact-channels { grid-template-columns: 1fr; }
@@ -1299,7 +1371,11 @@
     .talk-btn .lg-body { padding: 9px 14px !important; font-size: 13px; gap: 6px; }
     .brand { font-size: 14px; margin-right: auto; min-width: 0; overflow: hidden; }
     .brand-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .work-grid { grid-template-columns: 1fr; gap: 14px; }
+    .work-grid { gap: 14px; }
+    .work-grid > * { flex-basis: 86%; }
+    .work-arrow { width: 38px; height: 38px; font-size: 20px; }
+    .work-arrow.prev { left: 2px; }
+    .work-arrow.next { right: 2px; }
     .about-wrap { grid-template-columns: 1fr; gap: 24px; }
     /* Hero: text first, portrait below — stacked, both fit viewport */
     .hero-inner {
@@ -1504,6 +1580,10 @@
 </style>
 </head>
 <body>
+<script>/* Applied before the page paints. The toggle wiring lives at the end of
+   <body>, but waiting until then meant every navigation rendered light first
+   and flipped to dark afterwards, which read as the theme not being remembered. */
+try{if(localStorage.getItem('theme')==='dark')document.body.setAttribute('data-theme','dark');}catch(e){}</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1649,84 +1729,128 @@
         <h2>Featured work</h2>
       </div>
 
-      <div class="work-grid">
+      <div class="work-slider">
+        <button class="work-arrow prev is-off" id="workPrev" aria-label="Previous projects" type="button">‹</button>
+        <div class="work-grid" id="workTrack">
 
-        <article class="lg is-interactive work-card t-amber" onclick="location.href='Project - PocketCloud.html'">
+          <article class="lg is-interactive work-card t-violet" onclick="location.href='Project - Velvet Noise.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · Music &amp; Audio</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/oe4AYe00qELeDKsS-HCHN6ufd7TKOHLp_AeKe0IN3Aw4aH_q8rYDMakvotytSo5IR8sEJGQeWOj4geWStBGM=w400" alt="Velvet Noise sound library" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/Z-namruuQo3iygm5vT1pxE9YVsWA8Fim-PSexQqnnv9Pbia3_NciqZV7YvHnRvkzMkE7X6-_bMJ8J3YYbtGkpw=w400" alt="Velvet Noise three-layer mixer" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/gsg6-i6kHKaEe1ENxd58l6N37-mArf5hD2K-tmqJvLTkk_MocB2CvKEet5F9pmgfhj5cCtRFN53oFmdxm8SlNDo=w400" alt="Velvet Noise white, pink and brown noise" loading="lazy"/>
+                </div>
+              </div>
+              <h3>Velvet Noise</h3>
+              <p class="desc">A sound machine for sleep &amp; focus — 30+ sounds, 3-layer mixer &amp; 10-band EQ · live on Google Play</p>
+              <a href="Project - Velvet Noise.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="lg is-interactive work-card t-amber" onclick="location.href='Project - PocketCloud.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · EdTech</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/1LRePVZlkS15Ch2-flGO38IeMCVwDcZJVqq8XkQF-2LyMIN1g__YM2oYm3dgLwm-uY-b3DIJadmBlBbb8zx2XyM=w400" alt="PocketCloud practice quiz" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/LuFoknBcbZPH1QcgnvqEOBAUJeufFH3abi2HIJ0ZMANZAUtJhHwWGOARqmZ98WDXOc9eK2L2nQlHjQDwQZxiYdc=w400" alt="PocketCloud question with explanation" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/8FW5RNYT8QHSF7vpN070KPJEvO-L4VNw6lmRyMhBp0GcAOTFhmZ1rszg-XQjsXTY5NvWpZTe0HoZINtezbovXw=w400" alt="PocketCloud flashcard" loading="lazy"/>
+                </div>
+              </div>
+              <h3>PocketCloud</h3>
+              <p class="desc">AWS SAA-C03 exam prep — lessons, flashcards &amp; mock exams · live on Google Play</p>
+              <a href="Project - PocketCloud.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="lg is-interactive work-card t-cyan" onclick="location.href='Project - Drone Dash.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · Arcade</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/J4IQI_X3MSSRlGnnP652mXRZNtuNZ1hjK0pmSQ0vH6whERvTJxdHt2GPzKwhciOjeRLKTYUkaMEfBZ72QqZLMQ=w400" alt="Drone Dash gameplay" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/pamSPSbH8N3d_ExR1-vPjBePMEGvbfzO7qRxmyST7XD6lsj3dj4vJ4FZIZ40sgyjkKrcmF1X6iTjCmxmPt9N-Q=w400" alt="Drone Dash" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/DVlG57X4KzZd-uzBVFWrmzdvZaWIWmt1Ete09Tug_rDYpkG52qhQk0iqs_8ff6u0VJmX447gkH4FwQzwJ5JtEQ=w400" alt="Drone Dash altitude" loading="lazy"/>
+                </div>
+              </div>
+              <h3>Drone Dash</h3>
+              <p class="desc">Endless arcade flyer — pilot a drone through birds, jets &amp; storms · live on Google Play</p>
+              <a href="Project - Drone Dash.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="lg is-interactive work-card t-pink" onclick="location.href='Project - Reps RPG.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · Fitness</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/81KaYR6tO6fHF_5IsKvzCtlk-C2QrwhKcQZMjLml_K_oaf1S7QfbCUqQyR3WElHYIaCwgLJ1AQq0_-UrjHYHpg=w400" alt="Reps RPG boss fight" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/rgw3-qthhnAHtuOrBK1czWABUfLyEGZwd4S9fGZbZZm2daB1lWohB60kyM4fNaQt3vN2C77IMVszc2EGeN7JLw=w400" alt="Reps RPG" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/BcS4g7j_NI08Cd3L2BTwldqoN1orUJ3x_T_FuxqRJWtSMKk77FQsHYKRZjWZ6w--NLb6M7vy0bQWXUbMPBP8sQ=w400" alt="Reps RPG app lock" loading="lazy"/>
+                </div>
+              </div>
+              <h3>Reps RPG</h3>
+              <p class="desc">A fitness RPG — your pushups are sword swings · ML Kit pose detection</p>
+              <a href="Project - Reps RPG.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="lg is-interactive work-card t-aqua" onclick="location.href='Project - Salah Companion.html'">
+            <span class="lg-glow" aria-hidden="true"></span>
+            <div class="lg-body">
+              <span class="work-tag">Mobile · Lifestyle</span>
+              <div class="work-thumb">
+                <div class="work-shots">
+                  <img class="l" src="https://play-lh.googleusercontent.com/owF_GEWL1JWgNrHTEimv7zg-ijnhkov7ZLr7aD8bmawUxMQCVdhETL5M1pmqvvecvNMK0rtbWwrCCbfXyIQDmg=w400" alt="Salah Companion Quran" loading="lazy"/>
+                  <img class="c" src="https://play-lh.googleusercontent.com/gSD0NAtKKeFgRH208ZP-BBZrzi8Zb5yxmkFFYWL9GP7GcxA-EPCtJ-CxsPpn5Gw6wWudkWuTqXFMOeFPg6d6D5Q=w400" alt="Salah Companion prayer times" loading="lazy"/>
+                  <img class="r" src="https://play-lh.googleusercontent.com/FKkFArSIBZdY6mhMYwiS1bExtRtLobxVbqxIq2sJdjNYSUf6i3M_bYuidru26FmG1lWjvm5oSPNDfg8ssRzdWg=w400" alt="Salah Companion Qibla" loading="lazy"/>
+                </div>
+              </div>
+              <h3>Salah Companion</h3>
+              <p class="desc">All-in-one Islamic app — Quran, prayer times &amp; Qibla · 4.8★</p>
+              <a href="Project - Salah Companion.html" class="work-cta">View project
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </article>
+
+
+        <!-- Website, not an app — keep this card last in the track. -->
+        <article class="lg is-interactive work-card t-blue">
           <span class="lg-glow" aria-hidden="true"></span>
+          <a href="Project - Empire State Mechanical.html" class="card-link" aria-label="Empire State Mechanical case study"></a>
           <div class="lg-body">
-            <span class="work-tag">Mobile · EdTech</span>
+            <span class="work-tag">Website · HVAC</span>
             <div class="work-thumb">
-              <div class="work-shots">
-                <img class="l" src="https://play-lh.googleusercontent.com/1LRePVZlkS15Ch2-flGO38IeMCVwDcZJVqq8XkQF-2LyMIN1g__YM2oYm3dgLwm-uY-b3DIJadmBlBbb8zx2XyM=w400" alt="PocketCloud practice quiz" loading="lazy"/>
-                <img class="c" src="https://play-lh.googleusercontent.com/LuFoknBcbZPH1QcgnvqEOBAUJeufFH3abi2HIJ0ZMANZAUtJhHwWGOARqmZ98WDXOc9eK2L2nQlHjQDwQZxiYdc=w400" alt="PocketCloud question with explanation" loading="lazy"/>
-                <img class="r" src="https://play-lh.googleusercontent.com/8FW5RNYT8QHSF7vpN070KPJEvO-L4VNw6lmRyMhBp0GcAOTFhmZ1rszg-XQjsXTY5NvWpZTe0HoZINtezbovXw=w400" alt="PocketCloud flashcard" loading="lazy"/>
+              <div class="work-site">
+                <div class="bar"><i></i><i></i><i></i><span class="url">esmc.nyc</span></div>
+                <div class="body"><img class="shot" src="assets/esmc/thumb.webp" alt="Empire State Mechanical homepage" loading="lazy"/></div>
               </div>
             </div>
-            <h3>PocketCloud</h3>
-            <p class="desc">AWS SAA-C03 exam prep — lessons, flashcards &amp; mock exams · live on Google Play</p>
-            <a href="Project - PocketCloud.html" class="work-cta">View project
+            <h3>Empire State Mechanical</h3>
+            <p class="desc">Marketing site for a family-owned NYC HVAC company · nine pages, no framework, source on GitHub</p>
+            <a href="Project - Empire State Mechanical.html" class="work-cta">View project
               <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
             </a>
           </div>
         </article>
 
-        <article class="lg is-interactive work-card t-cyan" onclick="location.href='Project - Drone Dash.html'">
-          <span class="lg-glow" aria-hidden="true"></span>
-          <div class="lg-body">
-            <span class="work-tag">Mobile · Arcade</span>
-            <div class="work-thumb">
-              <div class="work-shots">
-                <img class="l" src="https://play-lh.googleusercontent.com/J4IQI_X3MSSRlGnnP652mXRZNtuNZ1hjK0pmSQ0vH6whERvTJxdHt2GPzKwhciOjeRLKTYUkaMEfBZ72QqZLMQ=w400" alt="Drone Dash gameplay" loading="lazy"/>
-                <img class="c" src="https://play-lh.googleusercontent.com/pamSPSbH8N3d_ExR1-vPjBePMEGvbfzO7qRxmyST7XD6lsj3dj4vJ4FZIZ40sgyjkKrcmF1X6iTjCmxmPt9N-Q=w400" alt="Drone Dash" loading="lazy"/>
-                <img class="r" src="https://play-lh.googleusercontent.com/DVlG57X4KzZd-uzBVFWrmzdvZaWIWmt1Ete09Tug_rDYpkG52qhQk0iqs_8ff6u0VJmX447gkH4FwQzwJ5JtEQ=w400" alt="Drone Dash altitude" loading="lazy"/>
-              </div>
-            </div>
-            <h3>Drone Dash</h3>
-            <p class="desc">Endless arcade flyer — pilot a drone through birds, jets &amp; storms · live on Google Play</p>
-            <a href="Project - Drone Dash.html" class="work-cta">View project
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="lg is-interactive work-card t-pink" onclick="location.href='Project - Reps RPG.html'">
-          <span class="lg-glow" aria-hidden="true"></span>
-          <div class="lg-body">
-            <span class="work-tag">Mobile · Fitness</span>
-            <div class="work-thumb">
-              <div class="work-shots">
-                <img class="l" src="https://play-lh.googleusercontent.com/81KaYR6tO6fHF_5IsKvzCtlk-C2QrwhKcQZMjLml_K_oaf1S7QfbCUqQyR3WElHYIaCwgLJ1AQq0_-UrjHYHpg=w400" alt="Reps RPG boss fight" loading="lazy"/>
-                <img class="c" src="https://play-lh.googleusercontent.com/rgw3-qthhnAHtuOrBK1czWABUfLyEGZwd4S9fGZbZZm2daB1lWohB60kyM4fNaQt3vN2C77IMVszc2EGeN7JLw=w400" alt="Reps RPG" loading="lazy"/>
-                <img class="r" src="https://play-lh.googleusercontent.com/BcS4g7j_NI08Cd3L2BTwldqoN1orUJ3x_T_FuxqRJWtSMKk77FQsHYKRZjWZ6w--NLb6M7vy0bQWXUbMPBP8sQ=w400" alt="Reps RPG app lock" loading="lazy"/>
-              </div>
-            </div>
-            <h3>Reps RPG</h3>
-            <p class="desc">A fitness RPG — your pushups are sword swings · ML Kit pose detection</p>
-            <a href="Project - Reps RPG.html" class="work-cta">View project
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="lg is-interactive work-card t-aqua" onclick="location.href='Project - Salah Companion.html'">
-          <span class="lg-glow" aria-hidden="true"></span>
-          <div class="lg-body">
-            <span class="work-tag">Mobile · Lifestyle</span>
-            <div class="work-thumb">
-              <div class="work-shots">
-                <img class="l" src="https://play-lh.googleusercontent.com/owF_GEWL1JWgNrHTEimv7zg-ijnhkov7ZLr7aD8bmawUxMQCVdhETL5M1pmqvvecvNMK0rtbWwrCCbfXyIQDmg=w400" alt="Salah Companion Quran" loading="lazy"/>
-                <img class="c" src="https://play-lh.googleusercontent.com/gSD0NAtKKeFgRH208ZP-BBZrzi8Zb5yxmkFFYWL9GP7GcxA-EPCtJ-CxsPpn5Gw6wWudkWuTqXFMOeFPg6d6D5Q=w400" alt="Salah Companion prayer times" loading="lazy"/>
-                <img class="r" src="https://play-lh.googleusercontent.com/FKkFArSIBZdY6mhMYwiS1bExtRtLobxVbqxIq2sJdjNYSUf6i3M_bYuidru26FmG1lWjvm5oSPNDfg8ssRzdWg=w400" alt="Salah Companion Qibla" loading="lazy"/>
-              </div>
-            </div>
-            <h3>Salah Companion</h3>
-            <p class="desc">All-in-one Islamic app — Quran, prayer times &amp; Qibla · 4.8★</p>
-            <a href="Project - Salah Companion.html" class="work-cta">View project
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M7 17L17 7M9 7h8v8"/></svg>
-            </a>
-          </div>
-        </article>
-
+        </div>
+        <button class="work-arrow next" id="workNext" aria-label="More projects" type="button">›</button>
       </div>
     </div>
   </section>
@@ -2841,6 +2965,57 @@
   }
 </style>
 
+<script>
+  // Featured work carousel. Mirrors the shot-slider on the project pages:
+  // native scroll + snap, arrows animate scrollLeft, snap is disabled during
+  // the animation because it fights a JS-driven scroll.
+  (function(){
+    var track = document.getElementById('workTrack');
+    var prev  = document.getElementById('workPrev');
+    var next  = document.getElementById('workNext');
+    if (!track || !prev || !next) return;
+    var anim = null;
+
+    function cardStep() {
+      var card = track.querySelector('.work-card');
+      var gap = parseFloat(getComputedStyle(track).columnGap);
+      if (isNaN(gap)) gap = 18;
+      return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+    }
+
+    function sync() {
+      var max = track.scrollWidth - track.clientWidth;
+      var scrollable = max > 4;
+      prev.classList.toggle('is-off', !scrollable || track.scrollLeft <= 2);
+      next.classList.toggle('is-off', !scrollable || track.scrollLeft >= max - 2);
+    }
+
+    function step(dir) {
+      var start = track.scrollLeft;
+      var max = track.scrollWidth - track.clientWidth;
+      var target = Math.max(0, Math.min(max, start + dir * cardStep()));
+      var change = target - start;
+      if (Math.abs(change) < 1) { track.scrollLeft = target; sync(); return; }
+      if (anim) clearTimeout(anim);
+      track.style.scrollSnapType = 'none';
+      var dur = 420, t0 = Date.now();
+      (function frame(){
+        var p = Math.min(1, (Date.now() - t0) / dur);
+        var e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2; // easeInOutCubic
+        track.scrollLeft = start + change * e;
+        if (p < 1) { anim = setTimeout(frame, 16); }
+        else { track.scrollLeft = target; track.style.scrollSnapType = ''; anim = null; sync(); }
+      })();
+    }
+
+    prev.addEventListener('click', function(){ step(-1); });
+    next.addEventListener('click', function(){ step(1); });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    window.addEventListener('load', sync);
+    sync();
+  })();
+</script>
 <script data-goatcounter="https://harisabd.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
